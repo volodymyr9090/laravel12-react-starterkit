@@ -18,10 +18,10 @@ import {
 } from '@/components/ui/alert-dialog';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Manajemen Role',
-        href: '/roles',
-    },
+  {
+    title: 'Manajemen Role',
+    href: '/roles',
+  },
 ];
 
 interface Permission {
@@ -51,30 +51,53 @@ export default function RoleIndex({ roles }: Props) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Manajemen Role" />
-      <div className="flex-1 p-4 space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Manajemen Role</h1>
+      <div className="flex-1 space-y-6 p-4 md:p-6">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Manajemen Role</h1>
+            <p className="text-muted-foreground">
+              Kelola role dan permission untuk sistem
+            </p>
+          </div>
           <Link href="/roles/create">
-            <Button>+ Tambah Role</Button>
+            <Button className="w-full md:w-auto">
+              <span className="hidden md:inline">+ Tambah Role</span>
+              <span className="md:hidden">+ Tambah</span>
+            </Button>
           </Link>
         </div>
 
-        <div className="grid gap-4">
+        <div className="space-y-4">
           {roles.length === 0 && (
-            <p className="text-muted-foreground">Belum ada data role.</p>
+            <Card>
+              <CardContent className="py-6 text-center text-muted-foreground">
+                Belum ada data role.
+              </CardContent>
+            </Card>
           )}
 
           {roles.map((role) => (
             <Card key={role.id} className="border shadow-sm">
-              <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                <CardTitle className="text-base font-semibold">{role.name}</CardTitle>
+              <CardHeader className="space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+                <div className="space-y-1">
+                  <CardTitle className="text-base font-semibold">
+                    {role.name}
+                  </CardTitle>
+                  <div className="text-sm text-muted-foreground">
+                    {role.permissions.length} permissions
+                  </div>
+                </div>
                 <div className="flex gap-2">
-                  <Link href={`/roles/${role.id}/edit`}>
-                    <Button size="sm" variant="outline">Edit</Button>
+                  <Link href={`/roles/${role.id}/edit`} className="w-1/2 md:w-auto">
+                    <Button size="sm" variant="outline" className="w-full">
+                      Edit
+                    </Button>
                   </Link>
                   <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button size="sm" variant="destructive">Hapus</Button>
+                    <AlertDialogTrigger asChild className="w-1/2 md:w-auto">
+                      <Button size="sm" variant="destructive" className="w-full">
+                        Hapus
+                      </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
@@ -85,7 +108,10 @@ export default function RoleIndex({ roles }: Props) {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDelete(role.id)} disabled={processing}>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(role.id)}
+                          disabled={processing}
+                        >
                           Ya, Hapus
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -93,18 +119,24 @@ export default function RoleIndex({ roles }: Props) {
                   </AlertDialog>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm text-muted-foreground">
-                <p><strong>Permissions:</strong></p>
-                {role.permissions.length > 0 ? (
-                  <div className="flex flex-wrap gap-1">
+              {role.permissions.length > 0 && (
+                <CardContent className="border-t pt-4">
+                  <p className="mb-2 text-sm font-medium text-muted-foreground">
+                    Daftar Permission:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
                     {role.permissions.map((permission) => (
-                      <Badge key={permission.id} variant="secondary" className="mr-1">{permission.name}</Badge>
+                      <Badge
+                        key={permission.id}
+                        variant="secondary"
+                        className="font-normal"
+                      >
+                        {permission.name}
+                      </Badge>
                     ))}
                   </div>
-                ) : (
-                  <p>Tidak ada permission</p>
-                )}
-              </CardContent>
+                </CardContent>
+              )}
             </Card>
           ))}
         </div>

@@ -19,7 +19,11 @@ class ShareMenus
                 return [];
             }
 
-            $menus = Menu::with(['children' => fn($q) => $q->orderBy('order')])
+            $menus = Menu::with([
+                'children' => fn($q) => $q->orderBy('order')->with([
+                    'children' => fn($q2) => $q2->orderBy('order')
+                ])
+            ])
                 ->whereNull('parent_id')
                 ->orderBy('order')
                 ->get();
@@ -29,6 +33,12 @@ class ShareMenus
                 ->map(function ($menu) use ($user) {
                     $menu->children = $menu->children
                         ->filter(fn($child) => !$child->roles || $user->hasAnyRole($child->roles))
+                        ->map(function ($child) use ($user) {
+                            $child->children = $child->children
+                                ->filter(fn($c) => !$c->roles || $user->hasAnyRole($c->roles))
+                                ->values();
+                            return $child;
+                        })
                         ->values();
                     return $menu;
                 });

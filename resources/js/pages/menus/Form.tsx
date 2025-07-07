@@ -1,14 +1,15 @@
 import React from 'react';
-import { useForm, Link } from '@inertiajs/react';
+import { useForm, Link, Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { type BreadcrumbItem } from '@/types';
+import IconPicker from '@/components/ui/icon-picker';
 
 interface MenuFormProps {
   menu?: {
@@ -26,25 +27,26 @@ interface MenuFormProps {
 export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
   const isEdit = !!menu;
 
-  const { data, setData, post, put, processing, errors } = useForm({
+  const { data, setData, post, put, processing, errors, reset } = useForm({
     title: menu?.title || '',
     route: menu?.route || '',
     icon: menu?.icon || '',
-    parent_id: menu?.parent_id !== null ? String(menu?.parent_id) : '',
+    parent_id: menu?.parent_id ?? null,
     roles: menu?.roles || [],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const parsedParentId = data.parent_id === '' ? null : Number(data.parent_id);
-    setData('parent_id', parsedParentId?.toString() || '');
 
-    isEdit
-      ? put(`/menus/${menu?.id}`)
-      : post('/menus');
+    if (isEdit) {
+      put(`/menus/${menu?.id}`);
+    } else {
+      post('/menus', {
+        onSuccess: () => reset(),
+      });
+    }
   };
-  
+
   const toggleRole = (role: string) => {
     setData('roles', data.roles.includes(role)
       ? data.roles.filter(r => r !== role)
@@ -58,72 +60,118 @@ export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={isEdit ? 'Edit Menu' : 'Tambah Menu'} />
-      <div className="flex-1 p-4">
-        <Card className="max-w-xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold">
-              {isEdit ? 'Edit Menu' : 'Tambah Menu'}
+      <Head title={isEdit ? (menu ? 'Edit Menu' : 'Tambah Menu') : 'Tambah Menu'} />
+      <div className="flex-1 p-4 md:p-6">
+        <Card className="max-w-2xl mx-auto">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-2xl font-bold tracking-tight">
+              {isEdit ? 'Edit Menu' : 'Tambah Menu Baru'}
             </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {isEdit ? 'Perbarui detail menu' : 'Buat menu baru untuk sistem'}
+            </p>
           </CardHeader>
-          <CardContent>
+
+          <Separator />
+
+          <CardContent className="pt-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label htmlFor="title">Judul Menu</Label>
-                <Input id="title" value={data.title} onChange={e => setData('title', e.target.value)} />
-                {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title}</p>}
-              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Judul Menu *</Label>
+                  <Input
+                    id="title"
+                    value={data.title}
+                    onChange={e => setData('title', e.target.value)}
+                    placeholder="Contoh: Dashboard"
+                    className={errors.title ? 'border-red-500' : ''}
+                  />
+                  {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
+                </div>
 
-              <div>
-                <Label htmlFor="route">Route</Label>
-                <Input id="route" value={data.route} onChange={e => setData('route', e.target.value)} />
-                {errors.route && <p className="text-sm text-red-500 mt-1">{errors.route}</p>}
-              </div>
+                <div className="space-y-2">
+                  <Label htmlFor="route">Route</Label>
+                  <Input
+                    id="route"
+                    value={data.route}
+                    onChange={e => setData('route', e.target.value)}
+                    placeholder="Contoh: dashboard.index"
+                    className={errors.route ? 'border-red-500' : ''}
+                  />
+                  {errors.route && <p className="text-sm text-red-500">{errors.route}</p>}
+                </div>
 
-              <div>
-                <Label htmlFor="icon">Icon (Lucide)</Label>
-                <Input id="icon" value={data.icon} onChange={e => setData('icon', e.target.value)} />
-                {errors.icon && <p className="text-sm text-red-500 mt-1">{errors.icon}</p>}
-              </div>
+                <div className="space-y-2">
+                  <Label htmlFor="icon">Icon (Lucide)</Label>
+                  <IconPicker
+                    value={data.icon}
+                    onChange={(val) => setData('icon', val)}
+                  />
+                  {errors.icon && <p className="text-sm text-red-500">{errors.icon}</p>}
+                </div>
 
-              <div>
-                <Label htmlFor="parent_id">Parent Menu</Label>
-                <select
-                  id="parent_id"
-                  value={data.parent_id}
-                  onChange={(e) => setData('parent_id', e.target.value)}
-                  className="w-full border rounded px-3 py-2"
-                >
-                  <option value="">— Tidak ada —</option>
-                  {parentMenus.map((m) => (
-                    <option key={m.id} value={String(m.id)}>{m.title}</option>
-                  ))}
-                </select>
+                <div className="space-y-2">
+                  <Label htmlFor="parent_id">Parent Menu</Label>
+                  <Select
+                    value={data.parent_id === null ? 'none' : String(data.parent_id)}
+                    onValueChange={(value) =>
+                      setData('parent_id', value === 'none' ? null : Number(value))
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Pilih parent menu" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">— Tidak ada —</SelectItem>
+                      {parentMenus.map((m) => (
+                        <SelectItem key={m.id} value={String(m.id)}>
+                          {m.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <Separator />
 
-              <div>
+              <div className="space-y-3">
                 <Label>Role yang dapat melihat</Label>
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                   {roles.map((role) => (
-                    <label key={role} className="flex items-center gap-2">
+                    <label key={role} className="flex items-center space-x-2">
                       <Checkbox
                         checked={data.roles.includes(role)}
                         onCheckedChange={() => toggleRole(role)}
+                        id={`role-${role}`}
                       />
-                      <span className="text-sm">{role}</span>
+                      <span className="text-sm font-medium leading-none">
+                        {role}
+                      </span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-4">
-                <Link href="/menus">
-                  <Button type="button" variant="secondary">Batal</Button>
+              <Separator />
+
+              <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+                <Link href="/menus" className="w-full sm:w-auto">
+                  <Button type="button" variant="secondary" className="w-full">
+                    Batal
+                  </Button>
                 </Link>
-                <Button type="submit" disabled={processing}>
-                  {isEdit ? 'Simpan Perubahan' : 'Simpan'}
+                <Button type="submit" disabled={processing} className="w-full sm:w-auto">
+                  {processing ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin">↻</span>
+                      {isEdit ? 'Menyimpan...' : 'Membuat...'}
+                    </span>
+                  ) : isEdit ? (
+                    'Simpan Perubahan'
+                  ) : (
+                    'Buat Menu'
+                  )}
                 </Button>
               </div>
             </form>

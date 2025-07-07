@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
+import React from 'react';
 
 interface Props {
   id: string;
@@ -13,6 +14,7 @@ export default function SortableMenuItem({ id, title }: Props) {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    cursor: 'grab', // tambahkan cursor grab
   };
 
   return (
@@ -21,7 +23,7 @@ export default function SortableMenuItem({ id, title }: Props) {
       style={style}
       {...attributes}
       {...listeners}
-      className="flex items-center gap-3 rounded border bg-white px-4 py-2 shadow-sm dark:bg-muted"
+      className="flex items-center gap-3 rounded border bg-background px-4 py-2 shadow-sm hover:shadow transition-shadow" // sesuaikan classname
     >
       <GripVertical className="text-muted-foreground size-4" />
       <span className="font-medium text-sm">{title}</span>

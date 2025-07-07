@@ -14,6 +14,7 @@ import {
   import { NavUser } from '@/components/nav-user';
   import { iconMapper } from '@/lib/iconMapper';
   import type { LucideIcon } from 'lucide-react';
+  import { ChevronDown } from 'lucide-react';
   
   interface MenuItem {
     id: number;
@@ -21,6 +22,50 @@ import {
     route: string | null;
     icon: string;
     children?: MenuItem[];
+  }
+  
+  function RenderMenu({ items, level = 0 }: { items: MenuItem[]; level?: number }) {
+    const { url: currentUrl } = usePage();
+  
+    return (
+      <>
+        {items.map((menu) => {
+          const Icon = iconMapper(menu.icon) as LucideIcon;
+          const hasChildren = menu.children && menu.children.length > 0;
+  
+          const isActive = menu.route && currentUrl.startsWith(menu.route);
+          const indentClass = `pl-${Math.min(4 + level * 4, 12)}`;
+  
+          const activeClass = isActive
+            ? 'bg-muted text-foreground font-semibold'
+            : 'text-muted-foreground';
+  
+          return (
+            <SidebarMenuItem key={menu.id}>
+              {hasChildren ? (
+                <>
+                  <SidebarMenuButton className={`${indentClass} ${activeClass}`}>
+                    <Icon className="size-4 mr-2" />
+                    <span className="flex-1">{menu.title}</span>
+                    <ChevronDown className="size-4 opacity-50" />
+                  </SidebarMenuButton>
+                  <SidebarMenu>
+                    <RenderMenu items={menu.children!} level={level + 1} />
+                  </SidebarMenu>
+                </>
+              ) : (
+                <SidebarMenuButton asChild className={`${indentClass} ${activeClass}`}>
+                  <Link href={menu.route || '#'}>
+                    <Icon className="size-4 mr-2" />
+                    {menu.title}
+                  </Link>
+                </SidebarMenuButton>
+              )}
+            </SidebarMenuItem>
+          );
+        })}
+      </>
+    );
   }
   
   export function AppSidebar() {
@@ -55,45 +100,7 @@ import {
   
         <SidebarContent>
           <SidebarMenu>
-            {menus.map((menu) => {
-              const Icon = iconMapper(menu.icon) as LucideIcon;
-              const hasChildren = menu.children && menu.children.length > 0;
-  
-              return (
-                <SidebarMenuItem key={menu.id}>
-                  {hasChildren ? (
-                    <>
-                      <SidebarMenuButton>
-                        <Icon className="size-4 mr-2" />
-                        {menu.title}
-                      </SidebarMenuButton>
-                      <SidebarMenu>
-                        {menu.children?.map((child) => {
-                          const ChildIcon = iconMapper(child.icon) as LucideIcon;
-                          return (
-                            <SidebarMenuItem key={child.id}>
-                              <SidebarMenuButton asChild>
-                                <Link href={child.route || '#'}>
-                                  <ChildIcon className="size-4 mr-2" />
-                                  {child.title}
-                                </Link>
-                              </SidebarMenuButton>
-                            </SidebarMenuItem>
-                          );
-                        })}
-                      </SidebarMenu>
-                    </>
-                  ) : (
-                    <SidebarMenuButton asChild>
-                      <Link href={menu.route || '#'}>
-                        <Icon className="size-4 mr-2" />
-                        {menu.title}
-                      </Link>
-                    </SidebarMenuButton>
-                  )}
-                </SidebarMenuItem>
-              );
-            })}
+            <RenderMenu items={menus} />
           </SidebarMenu>
         </SidebarContent>
   
@@ -103,4 +110,5 @@ import {
         </SidebarFooter>
       </Sidebar>
     );
-  }  
+  }
+  

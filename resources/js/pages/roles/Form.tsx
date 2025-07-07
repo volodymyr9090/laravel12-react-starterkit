@@ -49,10 +49,8 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
   const toggleGroup = (group: string, perms: Permission[]) => {
     const allChecked = perms.every(perm => data.permissions.includes(perm.name));
     if (allChecked) {
-      // Uncheck all
       setData('permissions', data.permissions.filter(p => !perms.map(perm => perm.name).includes(p)));
     } else {
-      // Check all
       const newPermissions = [...data.permissions];
       perms.forEach(perm => {
         if (!newPermissions.includes(perm.name)) {
@@ -63,78 +61,120 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
     }
   };
 
-
   return (
     <AppLayout>
       <Head title={isEdit ? 'Edit Role' : 'Tambah Role'} />
-      <div className="flex-1 p-4">
-        <Card className="max-w-3xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold">
-              {isEdit ? 'Edit Role' : 'Tambah Role'}
+      <div className="flex-1 p-4 md:p-6">
+        <Card className="max-w-4xl mx-auto">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-2xl font-bold tracking-tight">
+              {isEdit ? 'Edit Role' : 'Tambah Role Baru'}
             </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {isEdit ? 'Perbarui detail role dan permission' : 'Buat role baru dan atur permission'}
+            </p>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label htmlFor="name">Nama Role</Label>
-                <Input
-                  id="name"
-                  className="mt-1"
-                  value={data.name}
-                  onChange={(e) => setData('name', e.target.value)}
-                />
-                {errors.name && (
-                  <p className="text-sm text-red-500 mt-1">{errors.name}</p>
-                )}
-              </div>
+          
+          <Separator />
+          
+          <CardContent className="pt-5">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name" className="mb-2 block">Nama Role</Label>
+                  <Input
+                    id="name"
+                    placeholder="Masukkan nama role"
+                    value={data.name}
+                    onChange={(e) => setData('name', e.target.value)}
+                    className={errors.name ? 'border-red-500' : ''}
+                  />
+                  {errors.name && (
+                    <p className="text-sm text-red-500 mt-2">{errors.name}</p>
+                  )}
+                </div>
 
-              <Separator />
+                <Separator />
 
-              <div className="space-y-5">
-                <h2 className="text-lg font-semibold">Permissions</h2>
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-lg font-semibold">Permission</h2>
+                    <p className="text-sm text-muted-foreground">
+                      Pilih permission yang akan diberikan ke role ini
+                    </p>
+                  </div>
 
-                {Object.entries(groupedPermissions).map(([group, perms]) => {
-                  const allChecked = perms.every(perm => data.permissions.includes(perm.name));
+                  <div className="space-y-4">
+                    {Object.entries(groupedPermissions).map(([group, perms]) => {
+                      const allChecked = perms.every(perm => data.permissions.includes(perm.name));
 
-                  return (
-                    <div key={group} className="bg-muted/40 p-4 rounded-md border">
-                      <label className="flex items-center gap-2">
-                        <Checkbox
-                          checked={allChecked}
-                          onCheckedChange={() => toggleGroup(group, perms)}
-                        />
-                        <h3 className="text-md font-medium mb-2 text-muted-foreground uppercase tracking-wide cursor-pointer" onClick={() => toggleGroup(group, perms)}>
-                          {group}
-                        </h3>
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        {perms.map((perm) => (
-                          <label key={perm.id} className="flex items-center gap-2">
+                      return (
+                        <div key={group} className="bg-muted/20 p-4 rounded-lg border">
+                          <div className="flex items-center gap-3 mb-3">
                             <Checkbox
-                              checked={data.permissions.includes(perm.name)}
-                              onCheckedChange={() => togglePermission(perm.name)}
+                              id={`group-${group}`}
+                              checked={allChecked}
+                              onCheckedChange={() => toggleGroup(group, perms)}
                             />
-                            <span className="text-sm text-gray-800 dark:text-gray-200">{perm.name}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })}
+                            <label 
+                              htmlFor={`group-${group}`}
+                              className="text-sm font-medium uppercase tracking-wider text-muted-foreground cursor-pointer"
+                            >
+                              {group}
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pl-7">
+                            {perms.map((perm) => (
+                              <div key={perm.id} className="flex items-center gap-3">
+                                <Checkbox
+                                  id={`perm-${perm.id}`}
+                                  checked={data.permissions.includes(perm.name)}
+                                  onCheckedChange={() => togglePermission(perm.name)}
+                                />
+                                <label 
+                                  htmlFor={`perm-${perm.id}`}
+                                  className="text-sm cursor-pointer"
+                                >
+                                  {perm.name}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
               </div>
 
               <Separator />
 
-              <div className="flex items-center justify-end gap-2 pt-2">
-                <Button type="submit" disabled={processing}>
-                  {isEdit ? 'Simpan Perubahan' : 'Simpan Role'}
-                </Button>
-                <Link href="/roles">
-                  <Button type="button" variant="secondary">
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
+                <Link href="/roles" className="w-full sm:w-auto">
+                  <Button 
+                    type="button" 
+                    variant="secondary" 
+                    className="w-full"
+                  >
                     Kembali
                   </Button>
                 </Link>
+                <Button 
+                  type="submit" 
+                  disabled={processing}
+                  className="w-full sm:w-auto"
+                >
+                  {processing ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin">↻</span>
+                      Menyimpan...
+                    </span>
+                  ) : isEdit ? (
+                    'Simpan Perubahan'
+                  ) : (
+                    'Buat Role'
+                  )}
+                </Button>
               </div>
             </form>
           </CardContent>
