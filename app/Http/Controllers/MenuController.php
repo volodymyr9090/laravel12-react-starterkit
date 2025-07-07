@@ -37,8 +37,12 @@ class MenuController extends Controller
             'roles' => 'nullable|array',
         ]);
 
+        // Pastikan roles selalu array
+        $data['roles'] = $data['roles'] ?? [];
+
         Menu::create($data);
-        return redirect()->route('menus.index')->with('success', 'Menu created.');
+
+        return redirect()->route('menus.index')->with('success', 'Menu berhasil ditambahkan.');
     }
 
     public function edit(Menu $menu)
@@ -64,22 +68,29 @@ class MenuController extends Controller
             'roles' => 'nullable|array',
         ]);
 
+        $data['roles'] = $data['roles'] ?? [];
+
         $menu->update($data);
-        return redirect()->route('menus.index')->with('success', 'Menu updated.');
+
+        return redirect()->route('menus.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
     public function destroy(Menu $menu)
     {
         $menu->delete();
-        return redirect()->route('menus.index')->with('success', 'Menu deleted.');
+        return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
 
     public function reorder(Request $request)
     {
         $menus = $request->input('menus');
+
         foreach ($menus as $index => $menuId) {
-            Menu::where('id', $menuId)->update(['order' => $index + 1]);
+            Menu::where('id', $menuId)->update([
+                'order' => $index + 1,
+            ]);
         }
-        return redirect()->back()->with('success', 'Menu berhasil diurutkan.');
+
+        return redirect()->back()->with('success', 'Urutan menu berhasil disimpan.');
     }
 }

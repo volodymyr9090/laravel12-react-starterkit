@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { type BreadcrumbItem } from '@/types';
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -15,6 +16,13 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Manajemen Role',
+        href: '/roles',
+    },
+];
 
 interface Permission {
   id: number;
@@ -41,7 +49,7 @@ export default function RoleIndex({ roles }: Props) {
   };
 
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Manajemen Role" />
       <div className="flex-1 p-4 space-y-6">
         <div className="flex items-center justify-between">
