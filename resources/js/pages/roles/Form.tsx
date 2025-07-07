@@ -8,6 +8,8 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { BreadcrumbItem } from '@/types';
+
 
 interface Permission {
   id: number;
@@ -39,6 +41,11 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
     isEdit ? put(`/roles/${role?.id}`) : post('/roles');
   };
 
+  const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Manajemen Role', href: '/roles' },
+    { title: isEdit ? 'Edit Role' : 'Tambah Role', href: '#' },
+  ];
+
   const togglePermission = (perm: string) => {
     setData('permissions', data.permissions.includes(perm)
       ? data.permissions.filter((p) => p !== perm)
@@ -62,7 +69,7 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
   };
 
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={isEdit ? 'Edit Role' : 'Tambah Role'} />
       <div className="flex-1 p-4 md:p-6">
         <Card className="max-w-4xl mx-auto">
