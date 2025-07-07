@@ -1,4 +1,4 @@
-# Laravel 12 + React Starter Kit 🇮🇩
+# Laravel 12 + React Starter Kit 🇮🇩 🇵🇸
 
 Starter kit modern berbasis **Laravel 12**, **React (Inertia.js + TypeScript)**, **TailwindCSS**, dan **ShadCN UI**. Cocok digunakan untuk membangun aplikasi dashboard admin, manajemen user, pengaturan dinamis, dan kebutuhan SPA modern lainnya.
 
