@@ -1,33 +1,36 @@
-# Laravel 12 + React Starter Kit 🇮🇩 🇵🇸
+# 🚀 Laravel 12 + React Starter Kit
 
-Starter kit modern berbasis **Laravel 12**, **React (Inertia.js + TypeScript)**, **TailwindCSS**, dan **ShadCN UI**. Cocok digunakan untuk membangun aplikasi dashboard admin, manajemen user, pengaturan dinamis, dan kebutuhan SPA modern lainnya.
-
-Dikembangkan dan disesuaikan oleh **@yogijowo**.
+Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + TypeScript)**, **TailwindCSS**, dan **ShadCN UI v4**. Dirancang untuk mempercepat pengembangan aplikasi dashboard yang aman, responsif, dan mudah dikustomisasi — dari manajemen user hingga pengaturan aplikasi dinamis.
 
 ---
 
 ## ✨ Fitur Utama
 
-- 🔐 **Autentikasi** (login, register, reset password)
-- 👥 **Manajemen Role & Permission** (Spatie)
-- 📂 **Manajemen Menu Dinamis** berbasis role
-- ⚙️ **Halaman Pengaturan Aplikasi** (nama, logo, SEO, warna)
-- 🎨 **UI Modern**: ShadCN UI v4 + TailwindCSS + Dark/Light mode
-- ⚡️ **SPA Responsif**: React 19 + Inertia.js + TypeScript
+- 🔐 Autentikasi lengkap (login, register, reset password)
+- 👥 Manajemen Role & Permission (Spatie Laravel Permission)
+- 📂 Sidebar & Menu Dinamis berdasarkan role & permission
+- 🧹 Drag & drop manajemen menu (nested, reorder)
+- ⚙️ Pengaturan aplikasi (nama, logo, warna utama, SEO)
+- 🎨 UI modern dengan ShadCN UI v4 + TailwindCSS
+- 🌗 Dukungan dark/light mode
+- 🔒 Proteksi akses dinamis via middleware
+- ⚠️ Halaman 403 custom (React-based)
+- 💾 Setting warna `--primary` langsung dari database
 
 ---
 
-## 🧱 Teknologi yang Digunakan
+## 🧱 Stack Teknologi
 
-| Kebutuhan     | Teknologi                       |
-| ------------- | ------------------------------- |
-| Backend       | Laravel 12                      |
-| Frontend      | React + Inertia.js + TypeScript |
-| UI Components | ShadCN UI v4                    |
-| CSS Framework | TailwindCSS                     |
-| Hak Akses     | Spatie Laravel Permission       |
-| Layout        | Sidebar + Header Dinamis        |
-| DBMS          | MySQL                           |
+| Area        | Teknologi                          |
+| ----------- | ---------------------------------- |
+| Backend     | Laravel 12                         |
+| Frontend    | React 19 + Inertia.js + TypeScript |
+| UI Komponen | ShadCN UI v4                       |
+| CSS Utility | TailwindCSS                        |
+| Autentikasi | Laravel Fortify / Breeze-style     |
+| Hak Akses   | Spatie Laravel Permission (v5)     |
+| DBMS        | MySQL / MariaDB                    |
+| Layout      | Sidebar + Header dinamis           |
 
 ---
 
@@ -35,85 +38,121 @@ Dikembangkan dan disesuaikan oleh **@yogijowo**.
 
 ### 🔐 Autentikasi
 
-- Login, Register, Reset Password
-- Layout responsif: card / split / simple
+- Halaman login, register, reset password
+- Layout responsif (card / split / minimal)
+- Session management (logout, flash, redirect)
 
 ### 👤 Manajemen User
 
 - CRUD User
 - Assign Role ke User
 
-### 🧩 Role & Permission
+### 🤩 Manajemen Role & Permission
 
-- CRUD Role dan Permission
-- Assign Permission ke Role & Role ke User
+- CRUD Role
+- CRUD Permission
+- Assign permission ke role
+- Assign role ke user
+- Terintegrasi dengan `Spatie\Permission\Traits\HasRoles`
 
-### 📁 Menu Dinamis
+### 📂 Menu Dinamis
 
-- Tabel `menus`: id, title, icon, route, parent_id, role_id, order
-- Support submenu (nested), berdasarkan role
-- Ditampilkan di sidebar React secara dinamis
+- Tabel `menus`: `id`, `title`, `icon`, `route`, `parent_id`, `order`, `permission_name`
+- Nested submenu (multi-level)
+- Sidebar hanya menampilkan menu yang diizinkan oleh permission user
+- Fitur drag-and-drop menggunakan `@dnd-kit/core`
+- Penyimpanan urutan + struktur nested ke DB
 
 ### ⚙️ Pengaturan Aplikasi
 
-- Tabel `settingapp`: nama_app, deskripsi, logo, favicon, warna, SEO
-- Ditampilkan di layout React + disimpan via Inertia
+- Tabel `settingapp`: `nama_app`, `logo`, `favicon`, `warna`, `seo_meta`
+- Disimpan dan dibaca melalui layout
+- Variabel warna (`--primary`) langsung di-set dari DB tanpa rebuild Tailwind
+
+### ⛔ Proteksi Akses
+
+- Middleware `CheckMenuPermission`: mengecek `request->route()` terhadap `menus.permission_name`
+- User akan diarahkan ke halaman `403` jika tidak memiliki izin
+
+### ⚠️ Halaman Error React
+
+- `resources/js/pages/errors/403.tsx`
+- Menggunakan ShadCN UI: tombol, ikon, dan layout konsisten
+- Layout bisa dikustom (AppLayout / AuthLayout / ErrorLayout)
 
 ---
 
-## 🛠️ Instalasi
+## 🛠️ Instalasi Cepat
 
 ```bash
 git clone https://github.com/yogijowo/laravel12-react-starterkit.git
 cd laravel12-react-starterkit
+
 cp .env.example .env
 composer install
 php artisan key:generate
 php artisan migrate
+
 npm install
 npm run dev
 ```
 
 ---
 
-## 🧪 Testing & Reordering Menu
-
-- Drag & drop untuk menyusun urutan menu
-- Menu ditampilkan sesuai urutan dan role
-- Simpan urutan menu melalui tombol `Simpan Perubahan`
-
----
-
-## 💡 Konvensi Folder Frontend
+## 📂 Struktur Folder Frontend
 
 ```
 resources/js/
-├── components/        # Komponen UI reusable
-├── hooks/             # React hooks custom
-├── layouts/           # Layout auth & app
-├── lib/               # Utility / mapping
-├── pages/             # Halaman sesuai route
-└── types/             # Tipe TypeScript
+├── components/        # Komponen UI (ShadCN & custom)
+├── hooks/             # React custom hooks
+├── layouts/           # AppLayout, AuthLayout, ErrorLayout
+├── lib/               # Icon mapper, utilitas lainnya
+├── pages/             # Halaman (Inertia)
+│   ├── dashboard/     # Contoh halaman dashboard
+│   └── errors/403.tsx # Halaman error custom
+├── types/             # TypeScript interfaces & types
+└── ...
 ```
 
 ---
 
-## 🧠 Catatan Pengembang
+## 🦚 Testing Manual
 
-- Sidebar dinamis berdasarkan role
-- Drag & drop reorder menu dengan `@dnd-kit`
-- Theme dark/light tersimpan via state
-- Role & permission dari Spatie Permission (v5)
-- Menu yang tampil di sidebar terfilter otomatis
+| Fitur                            | Status |
+| -------------------------------- | ------ |
+| Login / Logout                   | ✅     |
+| CRUD Role & Permission           | ✅     |
+| Sidebar dinamis per permission   | ✅     |
+| Proteksi halaman otomatis (403)  | ✅     |
+| Drag & drop menu & simpan urutan | ✅     |
+| Dark mode & warna tema dinamis   | ✅     |
+| Halaman error 403 dengan React   | ✅     |
 
 ---
 
-## 🧑‍💻 Kontribusi
+## 🤝 Kontribusi
 
-Pull request, diskusi, dan saran sangat terbuka. Pastikan untuk melakukan `lint` dan `test` sebelum push.
+Kontribusi sangat terbuka untuk siapa saja!
+Silakan buat **issue**, ajukan **pull request**, atau berdiskusi di tab **Discussions**.
+Pastikan untuk menjalankan `lint` dan `build` sebelum mengirimkan PR.
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dirilis dengan [MIT License](https://opensource.org/licenses/MIT).
+Starter kit ini dirilis dengan lisensi [MIT License](https://opensource.org/licenses/MIT).
+Silakan gunakan untuk proyek pribadi maupun komersial.
+
+---
+
+## 🇵🇸 Free Palestine
+
+> **“You don’t have to be Palestinian to stand for Palestine. You just have to be human.”**
+
+Kami berdiri bersama rakyat Palestina.
+Kami menolak penjajahan, kekerasan, dan ketidakadilan.
+**Freedom is a human right. FREE PALESTINE 🇵🇸**
+
+---
+
+Dibuat dengan ❤️ oleh [@yogijowo](https://github.com/yogijowo)
