@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Menu;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Menu;
 use Symfony\Component\HttpFoundation\Response;
 
 class ShareMenus
@@ -15,33 +15,36 @@ class ShareMenus
         $user = $request->user();
 
         Inertia::share('menus', function () use ($user) {
-            if (!$user || !method_exists($user, 'hasAnyRole')) {
-                return [];
-            }
+            if (!$user) return [];
 
-            $menus = Menu::with([
-                'children' => fn($q) => $q->orderBy('order')->with([
-                    'children' => fn($q2) => $q2->orderBy('order')
-                ])
-            ])
-                ->whereNull('parent_id')
-                ->orderBy('order')
-                ->get();
+            // Ambil semua menu secara flat
+            $allMenus = Menu::orderBy('order')->get();
 
-            return $menus->filter(fn($menu) => !$menu->roles || $user->hasAnyRole($menu->roles))
-                ->values()
-                ->map(function ($menu) use ($user) {
-                    $menu->children = $menu->children
-                        ->filter(fn($child) => !$child->roles || $user->hasAnyRole($child->roles))
-                        ->map(function ($child) use ($user) {
-                            $child->children = $child->children
-                                ->filter(fn($c) => !$c->roles || $user->hasAnyRole($c->roles))
-                                ->values();
-                            return $child;
-                        })
-                        ->values();
-                    return $menu;
-                });
+            // Index berdasarkan ID
+            $indexed = $allMenus->keyBy('id');
+
+            // Recursive builder (filtered by permission)
+            $buildTree = function ($parentId = null) use (&$buildTree, $indexed, $user) {
+                return $indexed
+                    ->filter(
+                        fn($menu) =>
+                        $menu->parent_id === $parentId &&
+                            (!$menu->permission_name || $user->can($menu->permission_name))
+                    )
+                    ->map(function ($menu) use (&$buildTree) {
+                        $menu->children = $buildTree($menu->id)->values();
+                        return $menu;
+                    })
+                    ->filter(
+                        fn($menu) =>
+                        $menu->route || $menu->children->isNotEmpty()
+                    )
+                    ->values();
+            };
+
+            $menus = $buildTree();
+
+            return $menus;
         });
 
         return $next($request);

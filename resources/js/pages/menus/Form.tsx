@@ -5,11 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { type BreadcrumbItem } from '@/types';
 import IconPicker from '@/components/ui/icon-picker';
+import ComboboxPermission from '@/components/ui/combobox-permission';
 
 interface MenuFormProps {
   menu?: {
@@ -18,13 +17,13 @@ interface MenuFormProps {
     route: string;
     icon: string;
     parent_id: number | null;
-    roles: string[];
+    permission_name: string | null;
   };
   parentMenus: { id: number; title: string }[];
-  roles: string[];
+  permissions: string[];
 }
 
-export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
+export default function MenuForm({ menu, parentMenus, permissions }: MenuFormProps) {
   const isEdit = !!menu;
 
   const { data, setData, post, put, processing, errors, reset } = useForm({
@@ -32,25 +31,12 @@ export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
     route: menu?.route || '',
     icon: menu?.icon || '',
     parent_id: menu?.parent_id ?? null,
-    roles: menu?.roles || [],
+    permission_name: menu?.permission_name || '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (isEdit) {
-      put(`/menus/${menu?.id}`);
-    } else {
-      post('/menus', {
-        onSuccess: () => reset(),
-      });
-    }
-  };
-
-  const toggleRole = (role: string) => {
-    setData('roles', data.roles.includes(role)
-      ? data.roles.filter(r => r !== role)
-      : [...data.roles, role]);
+    isEdit ? put(`/menus/${menu?.id}`) : post('/menus', { onSuccess: () => reset() });
   };
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -60,7 +46,7 @@ export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={isEdit ? (menu ? 'Edit Menu' : 'Tambah Menu') : 'Tambah Menu'} />
+      <Head title={isEdit ? 'Edit Menu' : 'Tambah Menu'} />
       <div className="flex-1 p-4 md:p-6">
         <Card className="max-w-2xl mx-auto">
           <CardHeader className="pb-3">
@@ -82,7 +68,7 @@ export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
                   <Input
                     id="title"
                     value={data.title}
-                    onChange={e => setData('title', e.target.value)}
+                    onChange={(e) => setData('title', e.target.value)}
                     placeholder="Contoh: Dashboard"
                     className={errors.title ? 'border-red-500' : ''}
                   />
@@ -94,7 +80,7 @@ export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
                   <Input
                     id="route"
                     value={data.route}
-                    onChange={e => setData('route', e.target.value)}
+                    onChange={(e) => setData('route', e.target.value)}
                     placeholder="Contoh: dashboard.index"
                     className={errors.route ? 'border-red-500' : ''}
                   />
@@ -103,53 +89,39 @@ export default function MenuForm({ menu, parentMenus, roles }: MenuFormProps) {
 
                 <div className="space-y-2">
                   <Label htmlFor="icon">Icon (Lucide)</Label>
-                  <IconPicker
-                    value={data.icon}
-                    onChange={(val) => setData('icon', val)}
-                  />
+                  <IconPicker value={data.icon} onChange={(val) => setData('icon', val)} />
                   {errors.icon && <p className="text-sm text-red-500">{errors.icon}</p>}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="parent_id">Parent Menu</Label>
-                  <Select
-                    value={data.parent_id === null ? 'none' : String(data.parent_id)}
-                    onValueChange={(value) =>
-                      setData('parent_id', value === 'none' ? null : Number(value))
+                  <select
+                    id="parent_id"
+                    value={data.parent_id ?? ''}
+                    onChange={(e) =>
+                      setData('parent_id', e.target.value === '' ? null : Number(e.target.value))
                     }
+                    className="w-full rounded border px-3 py-2"
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih parent menu" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">— Tidak ada —</SelectItem>
-                      {parentMenus.map((m) => (
-                        <SelectItem key={m.id} value={String(m.id)}>
-                          {m.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <option value="">— Tidak ada —</option>
+                    {parentMenus.map((m) => (
+                      <option key={m.id} value={m.id}>
+                        {m.title}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              </div>
 
-              <Separator />
-
-              <div className="space-y-3">
-                <Label>Role yang dapat melihat</Label>
-                <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                  {roles.map((role) => (
-                    <label key={role} className="flex items-center space-x-2">
-                      <Checkbox
-                        checked={data.roles.includes(role)}
-                        onCheckedChange={() => toggleRole(role)}
-                        id={`role-${role}`}
-                      />
-                      <span className="text-sm font-medium leading-none">
-                        {role}
-                      </span>
-                    </label>
-                  ))}
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="permission_name">Permission</Label>
+                  <ComboboxPermission
+                    value={data.permission_name || ''}
+                    onChange={(val) => setData('permission_name', val)}
+                    options={permissions}
+                  />
+                  {errors.permission_name && (
+                    <p className="text-sm text-red-500">{errors.permission_name}</p>
+                  )}
                 </div>
               </div>
 

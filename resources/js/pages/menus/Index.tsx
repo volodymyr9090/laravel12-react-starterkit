@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import { Edit, Trash2, Plus, Save, ChevronDown, ChevronRight } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -43,7 +43,7 @@ interface MenuItem {
 }
 
 interface Props {
-  menus: MenuItem[];
+  menuItems: MenuItem[]; // ✅ ganti dari 'menus'
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -53,10 +53,10 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-export default function MenuIndex({ menus: initialMenus }: Props) {
-  const [menus, setMenus] = useState<MenuItem[]>(initialMenus);
+export default function MenuIndex({ menuItems }: Props) {
+  const [menus, setMenus] = useState<MenuItem[]>(menuItems);
   const [isSaving, setIsSaving] = useState(false);
-  const [expandedIds, setExpandedIds] = useState<number[]>([]); // ✅ state submenu terbuka
+  const [expandedIds, setExpandedIds] = useState<number[]>([]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -82,15 +82,9 @@ export default function MenuIndex({ menus: initialMenus }: Props) {
   const handleSave = () => {
     setIsSaving(true);
     router.post('/menus/reorder', { menus: menus.map(menu => menu.id) }, {
-      onSuccess: () => {
-        toast.success('Urutan menu berhasil disimpan');
-      },
-      onError: () => {
-        toast.error('Gagal menyimpan urutan menu');
-      },
-      onFinish: () => {
-        setIsSaving(false);
-      }
+      onSuccess: () => toast.success('Urutan menu berhasil disimpan'),
+      onError: () => toast.error('Gagal menyimpan urutan menu'),
+      onFinish: () => setIsSaving(false)
     });
   };
 
@@ -107,20 +101,18 @@ export default function MenuIndex({ menus: initialMenus }: Props) {
         );
         toast.success('Menu berhasil dihapus.');
       },
-      onError: () => {
-        toast.error('Gagal menghapus menu.');
-      },
+      onError: () => toast.error('Gagal menghapus menu.'),
     });
   };
 
   function renderMenuList(items: MenuItem[], level: number = 0): JSX.Element[] {
     const levelIndentMap = ['ml-0', 'ml-4', 'ml-8', 'ml-12', 'ml-16', 'ml-20'];
-  
+
     return items.map((menu) => {
       const hasChildren = menu.children && menu.children.length > 0;
       const isExpanded = expandedIds.includes(menu.id);
       const indentClass = levelIndentMap[level] || 'ml-20';
-  
+
       return (
         <div key={menu.id}>
           <div
@@ -141,27 +133,19 @@ export default function MenuIndex({ menus: initialMenus }: Props) {
               ) : (
                 <span className="w-4" />
               )}
-  
+
               <SortableMenuItem id={menu.id.toString()} title={menu.title} />
             </div>
-  
+
             <div className="flex items-center gap-1">
               <Link href={`/menus/${menu.id}/edit`}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-primary"
-                >
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
                   <Edit className="h-4 w-4" />
                 </Button>
               </Link>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-destructive"
-                  >
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
@@ -185,7 +169,7 @@ export default function MenuIndex({ menus: initialMenus }: Props) {
               </AlertDialog>
             </div>
           </div>
-  
+
           {hasChildren && isExpanded && (
             <div className="mt-1">
               {renderMenuList(menu.children!, level + 1)}
@@ -195,7 +179,7 @@ export default function MenuIndex({ menus: initialMenus }: Props) {
       );
     });
   }
-  
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Manajemen Menu" />

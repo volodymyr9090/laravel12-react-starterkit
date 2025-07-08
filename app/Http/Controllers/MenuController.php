@@ -5,32 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Models\User;
 
 class MenuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $menus = Menu::with('children.children') // 👈 nested 2 level
+        /** @var User $user */
+        $user = $request->user();
+
+        $menus = Menu::with([
+            'children' => fn($q) => $q->orderBy('order')->with([
+                'children' => fn($q2) => $q2->orderBy('order'),
+            ]),
+        ])
             ->whereNull('parent_id')
             ->orderBy('order')
             ->get();
 
         return Inertia::render('menus/Index', [
-            'menus' => $menus,
+            'menuItems' => $menus,
         ]);
     }
 
-
     public function create()
     {
-        $roles = Role::pluck('name');
-
-        $menus = Menu::orderBy('title')->get(); // ambil semua menu, bukan hanya parent, untuk support 2+ level submenu
+        $menus = Menu::orderBy('title')->get();
+        $permissions = Permission::orderBy('name')->pluck('name');
 
         return Inertia::render('menus/Form', [
-            'roles' => $roles,
             'parentMenus' => $menus,
+            'permissions' => $permissions,
         ]);
     }
 
@@ -42,12 +48,9 @@ class MenuController extends Controller
             'route' => 'nullable|string',
             'parent_id' => 'nullable|exists:menus,id',
             'order' => 'nullable|integer',
-            'roles' => 'nullable|array',
+            'permission_name' => 'nullable|string|exists:permissions,name',
         ]);
 
-        $data['roles'] = $data['roles'] ?? [];
-
-        // Default order jika tidak diisi
         if (!isset($data['order'])) {
             $data['order'] = Menu::where('parent_id', $data['parent_id'] ?? null)->max('order') + 1;
         }
@@ -59,17 +62,13 @@ class MenuController extends Controller
 
     public function edit(Menu $menu)
     {
-        $roles = Role::pluck('name');
-
-        // Hindari memilih dirinya sendiri sebagai parent
-        $menus = Menu::where('id', '!=', $menu->id)
-            ->orderBy('title')
-            ->get();
+        $menus = Menu::where('id', '!=', $menu->id)->orderBy('title')->get();
+        $permissions = Permission::orderBy('name')->pluck('name');
 
         return Inertia::render('menus/Form', [
             'menu' => $menu,
-            'roles' => $roles,
             'parentMenus' => $menus,
+            'permissions' => $permissions,
         ]);
     }
 
@@ -79,12 +78,10 @@ class MenuController extends Controller
             'title' => 'required|string',
             'icon' => 'nullable|string',
             'route' => 'nullable|string',
-            'parent_id' => 'nullable|exists:menus,id|not_in:' . $menu->id, // tidak bisa menjadi anak dirinya sendiri
+            'parent_id' => 'nullable|exists:menus,id|not_in:' . $menu->id,
             'order' => 'nullable|integer',
-            'roles' => 'nullable|array',
+            'permission_name' => 'nullable|string|exists:permissions,name',
         ]);
-
-        $data['roles'] = $data['roles'] ?? [];
 
         if (!isset($data['order'])) {
             $data['order'] = Menu::where('parent_id', $data['parent_id'] ?? null)->max('order') + 1;
@@ -97,10 +94,9 @@ class MenuController extends Controller
 
     public function destroy(Menu $menu)
     {
-        // ❗ Jika ada anak menu, hapus juga (opsional)
         $menu->children()->delete();
-
         $menu->delete();
+
         return redirect()->route('menus.index')->with('success', 'Menu berhasil dihapus.');
     }
 

@@ -14,24 +14,21 @@ class Menu extends Model
         'route',
         'parent_id',
         'order',
-        'roles',
-    ];
-
-    protected $casts = [
-        'roles' => 'array', // agar roles bisa diakses sebagai array
+        'permission_name',
     ];
 
     /**
-     * Relasi ke anak menu (submenu)
+     * Relasi menu anak (nested menu)
      */
-    public function children()
+    public function children(): HasMany
     {
         return $this->hasMany(Menu::class, 'parent_id')
-            ->with('children') // recursive agar nested
+            ->with('children')
             ->orderBy('order');
     }
+
     /**
-     * Relasi ke parent menu
+     * Relasi menu induk (jika nested)
      */
     public function parent(): BelongsTo
     {
@@ -39,7 +36,7 @@ class Menu extends Model
     }
 
     /**
-     * Scope: hanya menu root
+     * Scope: hanya menu root (tanpa parent)
      */
     public function scopeRoot($query)
     {
@@ -47,12 +44,13 @@ class Menu extends Model
     }
 
     /**
-     * Scope: menu untuk role tertentu (optional)
+     * Scope: menu yang dapat diakses oleh user (berdasarkan permission)
      */
-    public function scopeForRole($query, array $roleNames)
+    public function scopeForUser($query, $user)
     {
-        return $query->where(function ($q) use ($roleNames) {
-            $q->whereNull('roles')->orWhereJsonContains('roles', $roleNames);
+        return $query->where(function ($q) use ($user) {
+            $q->whereNull('permission_name')
+                ->orWhereIn('permission_name', $user->getAllPermissions()->pluck('name'));
         });
     }
 }

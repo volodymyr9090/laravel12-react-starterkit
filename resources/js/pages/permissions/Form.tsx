@@ -125,7 +125,7 @@ export default function PermissionForm({ permission, groups = [] }: PermissionFo
                     Kembali
                   </Button>
                 </Link>
-                <Button type="submit" disabled={processing}>
+                <Button type="submit" disabled={processing} >
                   <Save className="mr-2 h-4 w-4" />
                   {processing
                     ? isEdit
