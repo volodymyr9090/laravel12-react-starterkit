@@ -9,7 +9,7 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 - 🔐 Autentikasi lengkap (login, register, reset password)
 - 👥 Manajemen Role & Permission (Spatie Laravel Permission)
 - 📂 Sidebar & Menu Dinamis berdasarkan role & permission
-- 🧹 Drag & drop manajemen menu (nested, reorder)
+- 🧩 Drag & drop manajemen menu (nested, reorder)
 - ⚙️ Pengaturan aplikasi (nama, logo, warna utama, SEO)
 - 🎨 UI modern dengan ShadCN UI v4 + TailwindCSS
 - 🌗 Dukungan dark/light mode
@@ -47,7 +47,7 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 - CRUD User
 - Assign Role ke User
 
-### 🤩 Manajemen Role & Permission
+### 🧩 Manajemen Role & Permission
 
 - CRUD Role
 - CRUD Permission
@@ -69,7 +69,7 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 - Disimpan dan dibaca melalui layout
 - Variabel warna (`--primary`) langsung di-set dari DB tanpa rebuild Tailwind
 
-### ⛔ Proteksi Akses
+### 🚫 Proteksi Akses
 
 - Middleware `CheckMenuPermission`: mengecek `request->route()` terhadap `menus.permission_name`
 - User akan diarahkan ke halaman `403` jika tidak memiliki izin
@@ -79,6 +79,24 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 - `resources/js/pages/errors/403.tsx`
 - Menggunakan ShadCN UI: tombol, ikon, dan layout konsisten
 - Layout bisa dikustom (AppLayout / AuthLayout / ErrorLayout)
+
+---
+
+## 🖼️ Tampilan Aplikasi
+
+> Silakan upload gambar ke folder `/screenshots` dan sesuaikan nama file berikut jika ingin menambahkan screenshot.
+
+### 📌 Manajemen Role
+
+![Role](./screenshots/role.png)
+
+### 📌 Manajemen Menu
+
+![Manajemen Menu](./screenshots/menu.png)
+
+### 📌 Pengaturan Aplikasi
+
+![Pengaturan Aplikasi](./screenshots/aplikasi.png)
 
 ---
 
@@ -99,7 +117,7 @@ npm run dev
 
 ---
 
-## 📂 Struktur Folder Frontend
+## 🗂️ Struktur Folder Frontend
 
 ```
 resources/js/
@@ -116,7 +134,7 @@ resources/js/
 
 ---
 
-## 🦚 Testing Manual
+## 🧪 Testing Manual
 
 | Fitur                            | Status |
 | -------------------------------- | ------ |
