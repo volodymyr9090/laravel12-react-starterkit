@@ -84,8 +84,6 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 
 ## 🖼️ Tampilan Aplikasi
 
-> Silakan upload gambar ke folder `/screenshots` dan sesuaikan nama file berikut jika ingin menambahkan screenshot.
-
 ### 📌 Manajemen Role
 
 ![Role](./screenshots/role.png)
@@ -148,14 +146,6 @@ resources/js/
 
 ---
 
-## 🤝 Kontribusi
-
-Kontribusi sangat terbuka untuk siapa saja!
-Silakan buat **issue**, ajukan **pull request**, atau berdiskusi di tab **Discussions**.
-Pastikan untuk menjalankan `lint` dan `build` sebelum mengirimkan PR.
-
----
-
 ## 📄 Lisensi
 
 Starter kit ini dirilis dengan lisensi [MIT License](https://opensource.org/licenses/MIT).
@@ -172,5 +162,12 @@ Kami menolak penjajahan, kekerasan, dan ketidakadilan.
 **Freedom is a human right. FREE PALESTINE 🇵🇸**
 
 ---
+
+---
+
+## ☕ Dukung Saya
+
+Jika starter kit ini membantu Anda, silakan dukung saya dengan memberikan donasi melalui [Saweria](https://saweria.co/yogijowo).
+Setiap dukungan Anda sangat berarti! Terima kasih!
 
 Dibuat dengan ❤️ oleh [@yogijowo](https://github.com/yogijowo)
