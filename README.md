@@ -163,8 +163,6 @@ Kami menolak penjajahan, kekerasan, dan ketidakadilan.
 
 ---
 
----
-
 ## ☕ Dukung Saya
 
 Jika starter kit ini membantu Anda, silakan dukung saya dengan memberikan donasi melalui [Saweria](https://saweria.co/yogijowo).
