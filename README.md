@@ -1,6 +1,8 @@
 # 🚀 Laravel 12 + React Starter Kit
 
-Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + TypeScript)**, **TailwindCSS**, dan **ShadCN UI v4**. Dirancang untuk mempercepat pengembangan aplikasi dashboard yang aman, responsif, dan mudah dikustomisasi — dari manajemen user hingga pengaturan aplikasi dinamis.
+![Landing Page](./screenshots/halaman-utama.png)
+
+Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + TypeScript)**, **TailwindCSS**, dan **ShadCN UI v4**. Dirancang untuk mempercepat pengembangan aplikasi dashboard yang aman, responsif, dan mudah dikustomisasi.
 
 ---
 
@@ -13,9 +15,11 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 - ⚙️ Pengaturan aplikasi (nama, logo, warna utama, SEO)
 - 🎨 UI modern dengan ShadCN UI v4 + TailwindCSS
 - 🌗 Dukungan dark/light mode
-- 🔒 Proteksi akses dinamis via middleware
-- ⚠️ Halaman 403 custom (React-based)
+- 🔒 Proteksi akses dinamis via middleware `CheckMenuPermission`
+- ⚠️ Halaman error 403 React-based
 - 💾 Setting warna `--primary` langsung dari database
+- 🪪 Audit Log untuk pelacakan aktivitas pengguna
+- 📦 Fitur Backup Database otomatis/manual
 
 ---
 
@@ -28,7 +32,7 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 | UI Komponen | ShadCN UI v4                       |
 | CSS Utility | TailwindCSS                        |
 | Autentikasi | Laravel Fortify / Breeze-style     |
-| Hak Akses   | Spatie Laravel Permission (v5)     |
+| Hak Akses   | Spatie Laravel Permission v5       |
 | DBMS        | MySQL / MariaDB                    |
 | Layout      | Sidebar + Header dinamis           |
 
@@ -42,7 +46,7 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 - Layout responsif (card / split / minimal)
 - Session management (logout, flash, redirect)
 
-### 👤 Manajemen User
+### 👤 Manajemen Pengguna
 
 - CRUD User
 - Assign Role ke User
@@ -51,105 +55,134 @@ Starter kit modern dan fleksibel berbasis **Laravel 12**, **React (Inertia.js + 
 
 - CRUD Role
 - CRUD Permission
-- Assign permission ke role
-- Assign role ke user
-- Terintegrasi dengan `Spatie\Permission\Traits\HasRoles`
+- Assign Permission ke Role
+- Assign Role ke User
+- Integrasi penuh dengan `Spatie\Permission\Traits\HasRoles`
 
 ### 📂 Menu Dinamis
 
 - Tabel `menus`: `id`, `title`, `icon`, `route`, `parent_id`, `order`, `permission_name`
 - Nested submenu (multi-level)
-- Sidebar hanya menampilkan menu yang diizinkan oleh permission user
-- Fitur drag-and-drop menggunakan `@dnd-kit/core`
-- Penyimpanan urutan + struktur nested ke DB
+- Sidebar hanya menampilkan menu berdasarkan permission user
+- Drag & drop reorder (DnD Kit)
+- Simpan struktur ke DB secara dinamis
 
 ### ⚙️ Pengaturan Aplikasi
 
 - Tabel `settingapp`: `nama_app`, `logo`, `favicon`, `warna`, `seo_meta`
-- Disimpan dan dibaca melalui layout
-- Variabel warna (`--primary`) langsung di-set dari DB tanpa rebuild Tailwind
+- UI untuk update pengaturan
+- Warna utama dikontrol lewat variable CSS `--primary`
+- Logo dan favicon ditampilkan otomatis
 
-### 🚫 Proteksi Akses
+### 🪪 Audit Log
 
-- Middleware `CheckMenuPermission`: mengecek `request->route()` terhadap `menus.permission_name`
-- User akan diarahkan ke halaman `403` jika tidak memiliki izin
+- Menyimpan aktivitas pengguna (create, update, delete)
+- Dicatat: user, waktu, jenis aksi, data sebelumnya/sekarang
+- Ditampilkan dalam tampilan JSON viewer
 
-### ⚠️ Halaman Error React
+### 💾 Backup
 
-- `resources/js/pages/errors/403.tsx`
-- Menggunakan ShadCN UI: tombol, ikon, dan layout konsisten
-- Layout bisa dikustom (AppLayout / AuthLayout / ErrorLayout)
+- Buat dan download file backup DB
+- Fitur backup manual dengan timestamp
+- Tombol "Download" dan "Hapus" untuk setiap backup
 
 ---
 
-## 🖼️ Tampilan Aplikasi
+## 🖼️ Tampilan Aplikasi (Screenshots)
+
+### 📌 Halaman Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+### 📌 Manajemen Pengguna
+
+![Pengguna](./screenshots/pengguna.png)
 
 ### 📌 Manajemen Role
 
-![Role](./screenshots/role.png)
+![Role](./screenshots/roles.png)
+
+### 📌 Manajemen Permission
+
+![Permission](./screenshots/permissions.png)
 
 ### 📌 Manajemen Menu
 
-![Manajemen Menu](./screenshots/menu.png)
+![Menu](./screenshots/menu.png)
 
 ### 📌 Pengaturan Aplikasi
 
-![Pengaturan Aplikasi](./screenshots/aplikasi.png)
+![Aplikasi](./screenshots/aplikasi.png)
+
+### 📌 Audit Log
+
+![Log](./screenshots/log.png)
+
+### 📌 Backup Database
+
+![Backup](./screenshots/backup.png)
+
+### 📌 Landing Page
+
+![Halaman Utama](./screenshots/halaman-utama.png)
 
 ---
 
-## 🛠️ Instalasi Cepat
+## ⚙️ Instalasi & Setup
 
 ```bash
-git clone https://github.com/yogijowo/laravel12-react-starterkit.git
+# Clone repo
+https://github.com/yogijowo/laravel12-react-starterkit.git
 cd laravel12-react-starterkit
 
-cp .env.example .env
+# Install backend
 composer install
+cp .env.example .env
 php artisan key:generate
 php artisan migrate
 
-npm install
-npm run dev
+# Install frontend
+npm install && npm run dev
 ```
 
 ---
 
-## 🗂️ Struktur Folder Frontend
+## 📂 Struktur Folder Frontend
 
 ```
 resources/js/
 ├── components/        # Komponen UI (ShadCN & custom)
 ├── hooks/             # React custom hooks
-├── layouts/           # AppLayout, AuthLayout, ErrorLayout
-├── lib/               # Icon mapper, utilitas lainnya
-├── pages/             # Halaman (Inertia)
-│   ├── dashboard/     # Contoh halaman dashboard
-│   └── errors/403.tsx # Halaman error custom
-├── types/             # TypeScript interfaces & types
-└── ...
+├── layouts/           # Layout utama (App, Auth, Error)
+├── lib/               # Utilitas dan ikon
+├── pages/             # Halaman Inertia
+│   ├── dashboard/     # Dashboard user
+│   └── errors/403.tsx # Halaman akses ditolak
+├── types/             # TypeScript type definition
 ```
 
 ---
 
-## 🧪 Testing Manual
+## ✅ Checklist Uji Manual
 
-| Fitur                            | Status |
-| -------------------------------- | ------ |
-| Login / Logout                   | ✅     |
-| CRUD Role & Permission           | ✅     |
-| Sidebar dinamis per permission   | ✅     |
-| Proteksi halaman otomatis (403)  | ✅     |
-| Drag & drop menu & simpan urutan | ✅     |
-| Dark mode & warna tema dinamis   | ✅     |
-| Halaman error 403 dengan React   | ✅     |
+| Fitur                      | Status |
+| -------------------------- | ------ |
+| Login / Logout             | ✅     |
+| CRUD User                  | ✅     |
+| CRUD Role & Permission     | ✅     |
+| Menu & Sidebar dinamis     | ✅     |
+| Proteksi akses & Error 403 | ✅     |
+| Drag & drop menu           | ✅     |
+| Theme warna dari DB        | ✅     |
+| Dark mode                  | ✅     |
+| Audit log aktif            | ✅     |
+| Backup database            | ✅     |
 
 ---
 
 ## 📄 Lisensi
 
-Starter kit ini dirilis dengan lisensi [MIT License](https://opensource.org/licenses/MIT).
-Silakan gunakan untuk proyek pribadi maupun komersial.
+Starter kit ini dirilis dengan lisensi [MIT License](https://opensource.org/licenses/MIT). Bebas digunakan untuk proyek pribadi maupun komersial.
 
 ---
 
@@ -157,15 +190,16 @@ Silakan gunakan untuk proyek pribadi maupun komersial.
 
 > **“You don’t have to be Palestinian to stand for Palestine. You just have to be human.”**
 
-Kami berdiri bersama rakyat Palestina.
-Kami menolak penjajahan, kekerasan, dan ketidakadilan.
+Kami berdiri bersama rakyat Palestina. Kami menolak penjajahan, kekerasan, dan ketidakadilan.
 **Freedom is a human right. FREE PALESTINE 🇵🇸**
 
 ---
 
-## ☕ Dukung Saya
+## ☕ Dukung Proyek Ini
 
-Jika starter kit ini membantu Anda, silakan dukung saya dengan memberikan donasi melalui [Saweria](https://saweria.co/yogijowo).
-Setiap dukungan Anda sangat berarti! Terima kasih!
+Jika starter kit ini bermanfaat bagi Anda, silakan dukung saya di [Saweria](https://saweria.co/yogijowo).
+Terima kasih atas dukungan Anda 🙏
+
+---
 
 Dibuat dengan ❤️ oleh [@yogijowo](https://github.com/yogijowo)
