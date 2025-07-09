@@ -10,11 +10,16 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
-    @if (!empty($page['props']['setting']['favicon']))
-        <link rel="icon" href="{{ asset('storage/' . $page['props']['setting']['favicon']) }}" type="image/png">
+    @php
+        $favicon = $page['props']->setting->favicon ?? null;
+    @endphp
+
+    @if (!empty($favicon))
+        <link rel="icon" href="{{ asset('storage/' . $favicon) }}" type="image/png">
     @else
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
     @endif
+
 
     @routes
     @viteReactRefresh
