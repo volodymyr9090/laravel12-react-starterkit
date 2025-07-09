@@ -4,16 +4,17 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SettingAppController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SettingAppController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'menu.permission'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
@@ -27,6 +28,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/setting', [SettingAppController::class, 'edit'])->name('setting.edit');
     Route::post('/setting', [SettingAppController::class, 'update'])->name('setting.update');
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+    Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
+    Route::post('/backup/run', [BackupController::class, 'run'])->name('backup.run');
+    Route::get('/backup/download/{file}', [BackupController::class, 'download'])->name('backup.download');
+    Route::delete('/backup/delete/{file}', [BackupController::class, 'delete'])->name('backup.delete');
 });
 
 require __DIR__ . '/settings.php';
