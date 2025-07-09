@@ -140,10 +140,12 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
-php artisan serve
 
 # Install frontend
-npm install && npm run dev
+npm install
+
+# Running
+composer run dev
 ```
 
 ---
