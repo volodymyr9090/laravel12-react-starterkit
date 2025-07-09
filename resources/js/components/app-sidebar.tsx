@@ -103,14 +103,9 @@ export function AppSidebar() {
       icon: iconMapper('Star') as LucideIcon,
     },
     {
-      title: 'Repository',
-      url: 'https://github.com/laravel/react-starter-kit',
-      icon: iconMapper('Folder') as LucideIcon,
-    },
-    {
-      title: 'Documentation',
-      url: 'https://laravel.com/docs/starter-kits',
-      icon: iconMapper('BookOpen') as LucideIcon,
+      title: 'Donate',
+      url: 'https://saweria.co/yogijowo',
+      icon: iconMapper('Heart') as LucideIcon,
     },
   ];
 
