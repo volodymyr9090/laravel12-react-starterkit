@@ -16,6 +16,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
+import { ShieldCheck } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -60,9 +61,8 @@ export default function RoleIndex({ roles }: Props) {
             </p>
           </div>
           <Link href="/roles/create">
-            <Button className="w-full md:w-auto">
-              <span className="hidden md:inline">+ Tambah Role</span>
-              <span className="md:hidden">+ Tambah</span>
+            <Button className="w-full md:w-auto" size="sm">
+              + Tambah Role
             </Button>
           </Link>
         </div>
@@ -78,26 +78,25 @@ export default function RoleIndex({ roles }: Props) {
 
           {roles.map((role) => (
             <Card key={role.id} className="border shadow-sm">
-              <CardHeader className="space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+              <CardHeader className="bg-muted/40 border-b md:flex-row md:items-center md:justify-between md:space-y-0 space-y-2">
                 <div className="space-y-1">
-                  <CardTitle className="text-base font-semibold">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4 text-primary" />
                     {role.name}
                   </CardTitle>
                   <div className="text-sm text-muted-foreground">
-                    {role.permissions.length} permissions
+                    {role.permissions.length} permission
+                    {role.permissions.length > 1 ? 's' : ''}
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Link href={`/roles/${role.id}/edit`} className="w-1/2 md:w-auto">
-                    <Button size="sm" variant="outline" className="w-full">
-                      Edit
-                    </Button>
+                  <Link href={`/roles/${role.id}/edit`}>
+                    <Button size="sm" variant="outline">Edit</Button>
                   </Link>
+
                   <AlertDialog>
-                    <AlertDialogTrigger asChild className="w-1/2 md:w-auto">
-                      <Button size="sm" variant="destructive" className="w-full">
-                        Hapus
-                      </Button>
+                    <AlertDialogTrigger asChild>
+                      <Button size="sm" variant="destructive">Hapus</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
@@ -119,17 +118,18 @@ export default function RoleIndex({ roles }: Props) {
                   </AlertDialog>
                 </div>
               </CardHeader>
+
               {role.permissions.length > 0 && (
-                <CardContent className="border-t pt-4">
+                <CardContent className="pt-4">
                   <p className="mb-2 text-sm font-medium text-muted-foreground">
-                    Daftar Permission:
+                    Daftar Permissions:
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {role.permissions.map((permission) => (
                       <Badge
                         key={permission.id}
-                        variant="secondary"
-                        className="font-normal"
+                        variant="outline"
+                        className="font-normal text-xs border-muted"
                       >
                         {permission.name}
                       </Badge>

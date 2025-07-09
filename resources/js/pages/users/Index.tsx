@@ -2,7 +2,6 @@ import React from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { type BreadcrumbItem } from '@/types';
 import {
@@ -16,6 +15,12 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/id';
+
+dayjs.extend(relativeTime);
+dayjs.locale('id');
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -28,6 +33,7 @@ interface User {
   id: number;
   name: string;
   email: string;
+  created_at: string;
   roles: {
     id: number;
     name: string;
@@ -41,6 +47,14 @@ interface Props {
     last_page: number;
     links: { url: string | null; label: string; active: boolean }[];
   };
+}
+
+function getInitials(name: string) {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase();
 }
 
 export default function UserIndex({ users }: Props) {
@@ -57,53 +71,58 @@ export default function UserIndex({ users }: Props) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Manajemen Pengguna" />
-      <div className="flex-1 space-y-6 p-4 md:p-6">
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+      <div className="p-4 md:p-6 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Manajemen Pengguna</h1>
-            <p className="text-muted-foreground">
-              Kelola data pengguna dan peran mereka dalam sistem.
-            </p>
+            <p className="text-muted-foreground">Kelola data pengguna dan peran mereka dalam sistem.</p>
           </div>
           <Link href="/users/create">
-            <Button className="w-full md:w-auto">
-              <span className="hidden md:inline">+ Tambah Pengguna</span>
-              <span className="md:hidden">+ Tambah</span>
-            </Button>
+            <Button className="w-full md:w-auto" size="sm">+ Tambah Pengguna</Button>
           </Link>
         </div>
 
-        <div className="space-y-4">
-          {users.data.length === 0 && (
-            <Card>
-              <CardContent className="py-6 text-center text-muted-foreground">
-                Belum ada data pengguna.
-              </CardContent>
-            </Card>
-          )}
-
-          {users.data.map((user) => (
-            <Card key={user.id} className="border shadow-sm">
-              <CardHeader className="space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-                <div className="space-y-1">
-                  <CardTitle className="text-base font-semibold">
-                    {user.name}
-                  </CardTitle>
-                  <div className="text-sm text-muted-foreground">{user.email}</div>
+        <div className="space-y-2 divide-y rounded-md border bg-background">
+          {users.data.length === 0 ? (
+            <div className="py-8 text-center text-muted-foreground">Belum ada data pengguna.</div>
+          ) : (
+            users.data.map((user) => (
+              <div
+                key={user.id}
+                className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 py-5 hover:bg-muted/50 transition"
+              >
+                {/* Avatar dan Informasi */}
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-lg font-semibold text-primary">
+                    {getInitials(user.name)}
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-base font-medium">{user.name}</div>
+                    <div className="text-sm text-muted-foreground">{user.email}</div>
+                    <div className="text-xs text-muted-foreground italic">
+                      Terdaftar {dayjs(user.created_at).fromNow()}
+                    </div>
+                    {user.roles.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {user.roles.map((role) => (
+                          <Badge key={role.id} variant="secondary" className="text-xs font-normal">
+                            {role.name}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2 md:flex-row">
-                  <Link href={`/users/${user.id}/edit`} className="md:w-auto">
-                    <Button size="sm" variant="outline" className="w-full">
-                      Edit
-                    </Button>
+
+                {/* Aksi */}
+                <div className="flex flex-wrap gap-2 md:justify-end">
+                  <Link href={`/users/${user.id}/edit`}>
+                    <Button size="sm" variant="outline">Edit</Button>
                   </Link>
 
-                  {/* 🔐 Reset Password Button */}
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button size="sm" variant="secondary" className="w-full">
-                        Reset Password
-                      </Button>
+                      <Button size="sm" variant="secondary">Reset</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
@@ -111,7 +130,7 @@ export default function UserIndex({ users }: Props) {
                         <AlertDialogDescription>
                           Password untuk <strong>{user.name}</strong> akan direset menjadi:
                           <br />
-                          <code className="font-mono bg-muted px-2 py-1 rounded text-sm">ResetPasswordNya</code>
+                          <code className="bg-muted rounded px-2 py-1 text-sm">ResetPasswordNya</code>
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -126,16 +145,13 @@ export default function UserIndex({ users }: Props) {
                     </AlertDialogContent>
                   </AlertDialog>
 
-                  {/* 🗑️ Hapus Button */}
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button size="sm" variant="destructive" className="w-full">
-                        Hapus
-                      </Button>
+                      <Button size="sm" variant="destructive">Hapus</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
+                        <AlertDialogTitle>Hapus Pengguna?</AlertDialogTitle>
                         <AlertDialogDescription>
                           Pengguna <strong>{user.name}</strong> akan dihapus permanen.
                         </AlertDialogDescription>
@@ -152,24 +168,9 @@ export default function UserIndex({ users }: Props) {
                     </AlertDialogContent>
                   </AlertDialog>
                 </div>
-              </CardHeader>
-
-              {user.roles.length > 0 && (
-                <CardContent className="border-t pt-4">
-                  <p className="mb-2 text-sm font-medium text-muted-foreground">
-                    Role:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {user.roles.map((role) => (
-                      <Badge key={role.id} variant="secondary" className="font-normal">
-                        {role.name}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-          ))}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </AppLayout>

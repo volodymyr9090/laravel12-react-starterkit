@@ -104,11 +104,20 @@ class MenuController extends Controller
     {
         $menus = $request->input('menus');
 
-        foreach ($menus as $index => $menuId) {
-            Menu::where('id', $menuId)->update([
-                'order' => $index + 1,
-            ]);
-        }
+        $updateOrder = function ($items, $parentId = null) use (&$updateOrder) {
+            foreach ($items as $index => $item) {
+                Menu::where('id', $item['id'])->update([
+                    'order' => $index + 1,
+                    'parent_id' => $parentId,
+                ]);
+
+                if (!empty($item['children'])) {
+                    $updateOrder($item['children'], $item['id']);
+                }
+            }
+        };
+
+        $updateOrder($menus);
 
         return redirect()->back()->with('success', 'Urutan menu berhasil disimpan.');
     }

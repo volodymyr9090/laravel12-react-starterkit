@@ -5,7 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title inertia>{{ config('app.name', 'Laravel') }}</title>
+    @php
+        $setting = $page['props']['setting'] ?? null;
+        $appName = $setting['nama_app'] ?? config('app.name', 'Laravel');
+        $favicon = $setting['favicon'] ?? null;
+    @endphp
+
+    <title inertia>{{ $appName }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />

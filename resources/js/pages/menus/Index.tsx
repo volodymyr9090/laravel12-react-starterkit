@@ -43,7 +43,7 @@ interface MenuItem {
 }
 
 interface Props {
-  menuItems: MenuItem[]; // ✅ ganti dari 'menus'
+  menuItems: MenuItem[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -79,12 +79,39 @@ export default function MenuIndex({ menuItems }: Props) {
     setMenus((prev) => arrayMove(prev, oldIndex, newIndex));
   };
 
+  const handleChildDragEnd = (parentId: number) => (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setMenus((prevMenus) =>
+      prevMenus.map((menu) => {
+        if (menu.id !== parentId || !menu.children) return menu;
+
+        const oldIndex = menu.children.findIndex((m) => m.id === Number(active.id));
+        const newIndex = menu.children.findIndex((m) => m.id === Number(over.id));
+        if (oldIndex === -1 || newIndex === -1) return menu;
+
+        const newChildren = arrayMove(menu.children, oldIndex, newIndex);
+        return { ...menu, children: newChildren };
+      })
+    );
+  };
+
   const handleSave = () => {
     setIsSaving(true);
-    router.post('/menus/reorder', { menus: menus.map(menu => menu.id) }, {
+
+    const buildOrderPayload = (items: MenuItem[]): any[] => {
+      return items.map((item, index) => ({
+        id: item.id,
+        order: index + 1,
+        children: item.children ? buildOrderPayload(item.children) : [],
+      }));
+    };
+
+    router.post('/menus/reorder', { menus: buildOrderPayload(menus) }, {
       onSuccess: () => toast.success('Urutan menu berhasil disimpan'),
       onError: () => toast.error('Gagal menyimpan urutan menu'),
-      onFinish: () => setIsSaving(false)
+      onFinish: () => setIsSaving(false),
     });
   };
 
@@ -172,7 +199,18 @@ export default function MenuIndex({ menuItems }: Props) {
 
           {hasChildren && isExpanded && (
             <div className="mt-1">
-              {renderMenuList(menu.children!, level + 1)}
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleChildDragEnd(menu.id)}
+              >
+                <SortableContext
+                  items={menu.children!.map((c) => c.id.toString())}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {renderMenuList(menu.children!, level + 1)}
+                </SortableContext>
+              </DndContext>
             </div>
           )}
         </div>
@@ -193,7 +231,7 @@ export default function MenuIndex({ menuItems }: Props) {
                   Manajemen Menu
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  Atur urutan menu utama dengan drag & drop
+                  Atur urutan menu utama dan submenu dengan drag & drop
                 </p>
               </div>
               <div className="flex items-center gap-3">

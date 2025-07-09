@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingAppController;
+use App\Http\Controllers\AuditLogController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -25,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
     Route::get('/setting', [SettingAppController::class, 'edit'])->name('setting.edit');
     Route::post('/setting', [SettingAppController::class, 'update'])->name('setting.update');
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 });
 
 require __DIR__ . '/settings.php';

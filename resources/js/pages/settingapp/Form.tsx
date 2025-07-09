@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
-import { useForm, usePage, router } from '@inertiajs/react';
+import React, { useRef } from 'react';
+import { useForm } from '@inertiajs/react';
+import AppLayout from '@/layouts/app-layout';
+import { Head } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
-import { Head } from '@inertiajs/react';
 import { Separator } from '@/components/ui/separator';
-import { BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from '@/types';
 
 const DEFAULT_WARNA = '#181818';
 
@@ -52,7 +52,6 @@ export default function SettingForm({ setting }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     post('/setting', {
       forceFormData: true,
       preserveScroll: true,
@@ -63,17 +62,16 @@ export default function SettingForm({ setting }: Props) {
     <AppLayout breadcrumbs={breadcrumbs} title="Pengaturan Aplikasi">
       <Head title="Pengaturan Aplikasi" />
       <div className="flex-1 p-4 md:p-6">
-        <Card className="max-w-4xl mx-auto">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-2xl font-bold tracking-tight">
-              Pengaturan Aplikasi
-            </CardTitle>
+        <Card className="max-w-3xl mx-auto">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold tracking-tight">Pengaturan Aplikasi</CardTitle>
+            <p className="text-muted-foreground text-sm mt-1">Atur identitas aplikasi, warna tema, logo, dan metadata SEO.</p>
           </CardHeader>
           <Separator />
           <CardContent className="pt-6">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Nama App */}
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="nama_app">Nama Aplikasi</Label>
                 <Input
                   id="nama_app"
@@ -85,7 +83,7 @@ export default function SettingForm({ setting }: Props) {
               </div>
 
               {/* Deskripsi */}
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="deskripsi">Deskripsi</Label>
                 <Textarea
                   id="deskripsi"
@@ -95,28 +93,29 @@ export default function SettingForm({ setting }: Props) {
               </div>
 
               {/* Warna Tema */}
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="warna">Warna Utama</Label>
-                <Input
+                <div className="flex items-center gap-4">
+                  <Input
                     id="warna"
                     type="color"
                     value={data.warna}
                     onChange={(e) => setData('warna', e.target.value)}
-                    className="w-20 p-1"
-                />
-               <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={() => setData('warna', DEFAULT_WARNA)}
-                className="mt-2"
-                >
-                Reset ke Warna Default
-                </Button>
+                    className="w-16 h-10 p-1"
+                  />
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setData('warna', DEFAULT_WARNA)}
+                  >
+                    Reset Default
+                  </Button>
                 </div>
+              </div>
 
               {/* Logo Upload */}
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="logo">Logo (Max 2MB)</Label>
                 <Input
                   id="logo"
@@ -129,12 +128,12 @@ export default function SettingForm({ setting }: Props) {
                   }}
                 />
                 {logoPreview.current && (
-                  <img src={logoPreview.current} alt="Preview Logo" className="mt-2 h-16" />
+                  <img src={logoPreview.current} alt="Preview Logo" className="mt-2 h-16 rounded" />
                 )}
               </div>
 
               {/* Favicon Upload */}
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="favicon">Favicon (Max 1MB)</Label>
                 <Input
                   id="favicon"
@@ -147,14 +146,15 @@ export default function SettingForm({ setting }: Props) {
                   }}
                 />
                 {faviconPreview.current && (
-                  <img src={faviconPreview.current} alt="Preview Favicon" className="mt-2 h-10" />
+                  <img src={faviconPreview.current} alt="Preview Favicon" className="mt-2 h-10 rounded" />
                 )}
               </div>
 
-              {/* SEO Fields */}
+              {/* SEO Section */}
               <Separator />
-              <h3 className="text-lg font-semibold">SEO</h3>
-              <div>
+              <h3 className="text-lg font-semibold">Pengaturan SEO</h3>
+
+              <div className="space-y-1">
                 <Label htmlFor="seo_title">Judul SEO</Label>
                 <Input
                   id="seo_title"
@@ -163,7 +163,7 @@ export default function SettingForm({ setting }: Props) {
                 />
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="seo_description">Deskripsi SEO</Label>
                 <Textarea
                   id="seo_description"
@@ -172,7 +172,7 @@ export default function SettingForm({ setting }: Props) {
                 />
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <Label htmlFor="seo_keywords">Keyword SEO (pisahkan dengan koma)</Label>
                 <Input
                   id="seo_keywords"
@@ -183,7 +183,7 @@ export default function SettingForm({ setting }: Props) {
 
               {/* Submit Button */}
               <div className="pt-4 flex justify-end">
-                <Button type="submit" disabled={processing}>
+                <Button type="submit" disabled={processing} className="px-6">
                   {processing ? 'Menyimpan...' : 'Simpan Pengaturan'}
                 </Button>
               </div>
