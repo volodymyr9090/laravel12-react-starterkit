@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "yogijowo/starter-kit",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Starter Kit Laravel 12 + React + Inertia + Tailwind + ShadCN UI + Spatie Permission",
     "keywords": [
         "laravel",
         "framework"
