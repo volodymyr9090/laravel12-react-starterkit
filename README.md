@@ -42,7 +42,7 @@ A modern and flexible starter kit built with **Laravel 12**, **React (Inertia.js
 ## 🔧 Installation & Setup
 
 ```bash
-# Clone the repository
+# Create project
 composer create-project yogijowo/laravel12-react-starterkit my-app
 cd my-app
 
