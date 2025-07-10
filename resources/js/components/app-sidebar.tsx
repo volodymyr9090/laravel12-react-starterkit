@@ -103,8 +103,13 @@ export function AppSidebar() {
       icon: iconMapper('Star') as LucideIcon,
     },
     {
-      title: 'Donate',
+      title: 'Donate via Saweria',
       url: 'https://saweria.co/yogijowo',
+      icon: iconMapper('Heart') as LucideIcon,
+    },
+    {
+      title: 'Donate via Ko-fi',
+      url: 'https://ko-fi.com/yogijowo',
       icon: iconMapper('Heart') as LucideIcon,
     },
   ];
