@@ -1,6 +1,6 @@
-# 🚀 Laravel 12 + React Starter Kit
-
 ![Landing Page](./screenshots/landing.png)
+
+# 🚀 Laravel 12 + React Starter Kit
 
 A modern and flexible starter kit built with **Laravel 12**, **React (Inertia.js + TypeScript)**, **TailwindCSS**, and **ShadCN UI v4**. Designed to accelerate secure, responsive, and customizable dashboard application development.
 
