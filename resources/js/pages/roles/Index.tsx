@@ -20,7 +20,7 @@ import { ShieldCheck } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Manajemen Role',
+    title: 'Role Management',
     href: '/roles',
   },
 ];
@@ -51,18 +51,18 @@ export default function RoleIndex({ roles }: Props) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Manajemen Role" />
+      <Head title="Role Management" />
       <div className="flex-1 space-y-6 p-4 md:p-6">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Manajemen Role</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Role Management</h1>
             <p className="text-muted-foreground">
-              Kelola role dan permission untuk sistem
+              Manage roles and permissions for the system
             </p>
           </div>
           <Link href="/roles/create">
             <Button className="w-full md:w-auto" size="sm">
-              + Tambah Role
+              + Add Role
             </Button>
           </Link>
         </div>
@@ -71,7 +71,7 @@ export default function RoleIndex({ roles }: Props) {
           {roles.length === 0 && (
             <Card>
               <CardContent className="py-6 text-center text-muted-foreground">
-                Belum ada data role.
+                No role data available.
               </CardContent>
             </Card>
           )}
@@ -96,22 +96,22 @@ export default function RoleIndex({ roles }: Props) {
 
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button size="sm" variant="destructive">Hapus</Button>
+                      <Button size="sm" variant="destructive">Delete</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Role <strong>{role.name}</strong> akan dihapus permanen.
+                          Role <strong>{role.name}</strong> will be permanently deleted.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDelete(role.id)}
                           disabled={processing}
                         >
-                          Ya, Hapus
+                          Yes, Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -122,7 +122,7 @@ export default function RoleIndex({ roles }: Props) {
               {role.permissions.length > 0 && (
                 <CardContent className="pt-4">
                   <p className="mb-2 text-sm font-medium text-muted-foreground">
-                    Daftar Permissions:
+                    Permissions:
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {role.permissions.map((permission) => (

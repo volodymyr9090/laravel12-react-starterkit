@@ -42,8 +42,8 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
   };
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Manajemen Role', href: '/roles' },
-    { title: isEdit ? 'Edit Role' : 'Tambah Role', href: '#' },
+    { title: 'Role Management', href: '/roles' },
+    { title: isEdit ? 'Edit Role' : 'Create Role', href: '#' },
   ];
 
   const togglePermission = (perm: string) => {
@@ -70,15 +70,15 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={isEdit ? 'Edit Role' : 'Tambah Role'} />
+      <Head title={isEdit ? 'Edit Role' : 'Create Role'} />
       <div className="flex-1 p-4 md:p-6">
         <Card className="max-w-4xl mx-auto">
           <CardHeader className="pb-3">
             <CardTitle className="text-2xl font-bold tracking-tight">
-              {isEdit ? 'Edit Role' : 'Tambah Role Baru'}
+              {isEdit ? 'Edit Role' : 'Create New Role'}
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              {isEdit ? 'Perbarui detail role dan permission' : 'Buat role baru dan atur permission'}
+              {isEdit ? 'Update role details and permissions' : 'Create a new role and set permissions'}
             </p>
           </CardHeader>
           
@@ -88,10 +88,10 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="name" className="mb-2 block">Nama Role</Label>
+                  <Label htmlFor="name" className="mb-2 block">Role Name</Label>
                   <Input
                     id="name"
-                    placeholder="Masukkan nama role"
+                    placeholder="Enter role name"
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
                     className={errors.name ? 'border-red-500' : ''}
@@ -105,9 +105,9 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
 
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-lg font-semibold">Permission</h2>
+                    <h2 className="text-lg font-semibold">Permissions</h2>
                     <p className="text-sm text-muted-foreground">
-                      Pilih permission yang akan diberikan ke role ini
+                      Select permissions to grant to this role
                     </p>
                   </div>
 
@@ -163,7 +163,7 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
                     variant="secondary" 
                     className="w-full"
                   >
-                    Kembali
+                    Cancel
                   </Button>
                 </Link>
                 <Button 
@@ -174,12 +174,12 @@ export default function RoleForm({ role, groupedPermissions }: Props) {
                   {processing ? (
                     <span className="flex items-center gap-2">
                       <span className="animate-spin">↻</span>
-                      Menyimpan...
+                      Saving...
                     </span>
                   ) : isEdit ? (
-                    'Simpan Perubahan'
+                    'Save Changes'
                   ) : (
-                    'Buat Role'
+                    'Create Role'
                   )}
                 </Button>
               </div>

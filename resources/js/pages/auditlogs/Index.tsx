@@ -40,7 +40,7 @@ export default function AuditLogIndex({ logs }: Props) {
           <CardHeader className="pb-3">
             <CardTitle className="text-2xl font-bold">Audit Log</CardTitle>
             <p className="text-muted-foreground text-sm">
-              Riwayat aktivitas pengguna di sistem
+              User activity history in the system
             </p>
           </CardHeader>
 
@@ -49,7 +49,7 @@ export default function AuditLogIndex({ logs }: Props) {
           <CardContent className="pt-6 space-y-4">
             {/* List Logs */}
             {logs.data.length === 0 ? (
-              <p className="text-muted-foreground text-center">Tidak ada log aktivitas.</p>
+              <p className="text-muted-foreground text-center">No activity logs.</p>
             ) : (
               logs.data.map((log) => (
                 <div

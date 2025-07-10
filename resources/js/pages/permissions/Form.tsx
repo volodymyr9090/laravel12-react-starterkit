@@ -50,22 +50,22 @@ export default function PermissionForm({ permission, groups = [] }: PermissionFo
   };
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Manajemen Permission', href: '/permissions' },
-    { title: isEdit ? 'Edit Permission' : 'Tambah Permission', href: '#' },
+    { title: 'Permission Management', href: '/permissions' },
+    { title: isEdit ? 'Edit Permission' : 'Add Permission', href: '#' },
   ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={isEdit ? 'Edit Permission' : 'Tambah Permission'} />
+      <Head title={isEdit ? 'Edit Permission' : 'Add Permission'} />
 
       <div className="flex-1 p-4 md:p-6 max-w-xl mx-auto">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">
-              {isEdit ? 'Edit Permission' : 'Tambah Permission'}
+              {isEdit ? 'Edit Permission' : 'Add Permission'}
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              {isEdit ? 'Ubah detail permission' : 'Buat permission baru'}
+              {isEdit ? 'Edit permission details' : 'Create a new permission'}
             </p>
           </CardHeader>
 
@@ -73,12 +73,12 @@ export default function PermissionForm({ permission, groups = [] }: PermissionFo
 
           <CardContent className="pt-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Nama Permission */}
+              {/* Permission Name */}
               <div className="space-y-2">
-                <Label htmlFor="name">Nama Permission</Label>
+                <Label htmlFor="name">Permission Name</Label>
                 <Input
                   id="name"
-                  placeholder="contoh: manage-users"
+                  placeholder="example: manage-users"
                   value={data.name}
                   onChange={(e) => setData('name', e.target.value)}
                   className={errors.name ? 'border-red-500' : ''}
@@ -86,12 +86,12 @@ export default function PermissionForm({ permission, groups = [] }: PermissionFo
                 {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
               </div>
 
-              {/* Pilih Group */}
+              {/* Select Group */}
               <div className="space-y-2">
-                <Label htmlFor="group">Pilih Group</Label>
+                <Label htmlFor="group">Select Group</Label>
                 <Select value={data.group || ''} onValueChange={(val) => setData('group', val)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Pilih group..." />
+                    <SelectValue placeholder="Select group..." />
                   </SelectTrigger>
                   <SelectContent>
                     {groups.map((group) => (
@@ -104,12 +104,12 @@ export default function PermissionForm({ permission, groups = [] }: PermissionFo
                 {errors.group && <p className="text-sm text-red-500">{errors.group}</p>}
               </div>
 
-              {/* Group Baru */}
+              {/* New Group */}
               <div className="space-y-2">
-                <Label htmlFor="newGroup">Atau ketik group baru</Label>
+                <Label htmlFor="newGroup">Or type a new group</Label>
                 <Input
                   id="newGroup"
-                  placeholder="contoh: Tender / Artikel / User"
+                  placeholder="example: Tender / Article / User"
                   value={data.newGroup}
                   onChange={(e) => setData('newGroup', e.target.value)}
                 />
@@ -117,23 +117,23 @@ export default function PermissionForm({ permission, groups = [] }: PermissionFo
 
               <Separator />
 
-              {/* Tombol Aksi */}
+              {/* Action Buttons */}
               <div className="flex items-center justify-between pt-2">
                 <Link href="/permissions">
                   <Button type="button" variant="secondary">
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Kembali
+                    Back
                   </Button>
                 </Link>
                 <Button type="submit" disabled={processing} >
                   <Save className="mr-2 h-4 w-4" />
                   {processing
                     ? isEdit
-                      ? 'Menyimpan...'
-                      : 'Menambahkan...'
+                      ? 'Saving...'
+                      : 'Adding...'
                     : isEdit
-                    ? 'Simpan Perubahan'
-                    : 'Tambah'}
+                    ? 'Save Changes'
+                    : 'Add'}
                 </Button>
               </div>
             </form>

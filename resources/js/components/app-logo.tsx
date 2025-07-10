@@ -7,13 +7,17 @@ export default function AppLogo() {
     logo?: string;
   } | null;
 
-  if (!setting) return null;
+  const defaultAppName = 'Laravel Starter Kit';
+  const defaultLogo = '';
+
+  const appName = setting?.nama_app || defaultAppName;
+  const logo = setting?.logo || defaultLogo;
 
   return (
     <div className="flex items-center gap-2">
-      {setting.logo ? (
+      {logo ? (
         <img
-          src={`/storage/${setting.logo}`}
+          src={`/storage/${logo}`}
           alt="Logo"
           className="h-8 w-8 rounded-md object-contain"
         />
@@ -24,7 +28,7 @@ export default function AppLogo() {
       )}
       <div className="grid flex-1 text-left text-sm">
         <span className="mb-0.5 truncate leading-none font-semibold">
-          {setting.nama_app}
+          {appName}
         </span>
       </div>
     </div>

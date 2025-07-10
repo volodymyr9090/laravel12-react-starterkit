@@ -39,7 +39,7 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Manajemen Permission',
+    title: 'Permission Management',
     href: '/permissions',
   },
 ];
@@ -49,8 +49,8 @@ export default function PermissionIndex({ permissions, groups, filters }: Props)
 
   const handleDelete = (id: number) => {
     router.delete(`/permissions/${id}`, {
-      onSuccess: () => toast.success('Permission berhasil dihapus'),
-      onError: () => toast.error('Gagal menghapus permission'),
+      onSuccess: () => toast.success('Permission deleted successfully'),
+      onError: () => toast.error('Failed to delete permission'),
     });
   };
 
@@ -67,18 +67,18 @@ export default function PermissionIndex({ permissions, groups, filters }: Props)
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Manajemen Permission" />
+      <Head title="Permission Management" />
       <div className="flex-1 p-4 md:p-6">
         <Card>
           <CardHeader className="pb-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <CardTitle className="text-2xl font-bold">Permission</CardTitle>
-              <p className="text-muted-foreground text-sm">Kelola izin akses sistem</p>
+              <CardTitle className="text-2xl font-bold">Permissions</CardTitle>
+              <p className="text-muted-foreground text-sm">Manage system access permissions</p>
             </div>
             <Link href="/permissions/create">
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Tambah Permission
+                Add Permission
               </Button>
             </Link>
           </CardHeader>
@@ -90,7 +90,7 @@ export default function PermissionIndex({ permissions, groups, filters }: Props)
             <div className="flex flex-col md:flex-row md:items-center gap-4">
               <Input
                 type="text"
-                placeholder="Cari permission... (tekan Enter)"
+                placeholder="Search permissions... (press Enter)"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleSearchKey}
@@ -100,10 +100,10 @@ export default function PermissionIndex({ permissions, groups, filters }: Props)
                 onValueChange={handleGroupChange}
               >
                 <SelectTrigger className="md:w-64">
-                  <SelectValue placeholder="Semua Group" />
+                  <SelectValue placeholder="All Groups" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__ALL__">Semua Group</SelectItem>
+                  <SelectItem value="__ALL__">All Groups</SelectItem>
                   {groups.map((group) => (
                     <SelectItem key={group} value={group}>
                       {group}
@@ -116,7 +116,7 @@ export default function PermissionIndex({ permissions, groups, filters }: Props)
             {/* List */}
             <div className="space-y-3">
               {permissions.data.length === 0 ? (
-                <p className="text-muted-foreground text-center">Tidak ada data.</p>
+                <p className="text-muted-foreground text-center">No data available.</p>
               ) : (
                 permissions.data.map((permission) => (
                   <div
@@ -138,18 +138,18 @@ export default function PermissionIndex({ permissions, groups, filters }: Props)
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Hapus permission ini?</AlertDialogTitle>
+                            <AlertDialogTitle>Delete this permission?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Permission <strong>{permission.name}</strong> akan dihapus secara permanen.
+                              Permission <strong>{permission.name}</strong> will be permanently deleted.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
                               className="bg-destructive hover:bg-destructive/90"
                               onClick={() => handleDelete(permission.id)}
                             >
-                              Hapus
+                              Delete
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>

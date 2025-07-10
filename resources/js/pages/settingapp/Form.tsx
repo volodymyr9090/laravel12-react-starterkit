@@ -30,7 +30,7 @@ interface Props {
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Pengaturan', href: '/setting' },
+  { title: 'Application Settings', href: '/settingsapp' },
 ];
 
 export default function SettingForm({ setting }: Props) {
@@ -52,27 +52,27 @@ export default function SettingForm({ setting }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    post('/setting', {
+    post('/settingsapp', {
       forceFormData: true,
       preserveScroll: true,
     });
   };
 
   return (
-    <AppLayout breadcrumbs={breadcrumbs} title="Pengaturan Aplikasi">
-      <Head title="Pengaturan Aplikasi" />
+    <AppLayout breadcrumbs={breadcrumbs} title="Application Settings">
+      <Head title="Application Settings" />
       <div className="flex-1 p-4 md:p-6">
         <Card className="max-w-3xl mx-auto">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold tracking-tight">Pengaturan Aplikasi</CardTitle>
-            <p className="text-muted-foreground text-sm mt-1">Atur identitas aplikasi, warna tema, logo, dan metadata SEO.</p>
+            <CardTitle className="text-2xl font-bold tracking-tight">Application Settings</CardTitle>
+            <p className="text-muted-foreground text-sm mt-1">Configure application identity, theme color, logo, and SEO metadata.</p>
           </CardHeader>
           <Separator />
           <CardContent className="pt-6">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Nama App */}
               <div className="space-y-1">
-                <Label htmlFor="nama_app">Nama Aplikasi</Label>
+                <Label htmlFor="nama_app">Application Name</Label>
                 <Input
                   id="nama_app"
                   value={data.nama_app}
@@ -84,7 +84,7 @@ export default function SettingForm({ setting }: Props) {
 
               {/* Deskripsi */}
               <div className="space-y-1">
-                <Label htmlFor="deskripsi">Deskripsi</Label>
+                <Label htmlFor="deskripsi">Description</Label>
                 <Textarea
                   id="deskripsi"
                   value={data.deskripsi}
@@ -94,7 +94,7 @@ export default function SettingForm({ setting }: Props) {
 
               {/* Warna Tema */}
               <div className="space-y-1">
-                <Label htmlFor="warna">Warna Utama</Label>
+                <Label htmlFor="warna">Theme Color</Label>
                 <div className="flex items-center gap-4">
                   <Input
                     id="warna"
@@ -152,10 +152,10 @@ export default function SettingForm({ setting }: Props) {
 
               {/* SEO Section */}
               <Separator />
-              <h3 className="text-lg font-semibold">Pengaturan SEO</h3>
+              <h3 className="text-lg font-semibold">SEO Settings</h3>
 
               <div className="space-y-1">
-                <Label htmlFor="seo_title">Judul SEO</Label>
+                <Label htmlFor="seo_title">SEO Title</Label>
                 <Input
                   id="seo_title"
                   value={data.seo.title}
@@ -164,7 +164,7 @@ export default function SettingForm({ setting }: Props) {
               </div>
 
               <div className="space-y-1">
-                <Label htmlFor="seo_description">Deskripsi SEO</Label>
+                <Label htmlFor="seo_description">SEO Description</Label>
                 <Textarea
                   id="seo_description"
                   value={data.seo.description}
@@ -173,7 +173,7 @@ export default function SettingForm({ setting }: Props) {
               </div>
 
               <div className="space-y-1">
-                <Label htmlFor="seo_keywords">Keyword SEO (pisahkan dengan koma)</Label>
+                <Label htmlFor="seo_keywords">SEO Keywords (separate with commas)</Label>
                 <Input
                   id="seo_keywords"
                   value={data.seo.keywords}
@@ -184,7 +184,7 @@ export default function SettingForm({ setting }: Props) {
               {/* Submit Button */}
               <div className="pt-4 flex justify-end">
                 <Button type="submit" disabled={processing} className="px-6">
-                  {processing ? 'Menyimpan...' : 'Simpan Pengaturan'}
+                  {processing ? 'Saving...' : 'Save Settings'}
                 </Button>
               </div>
             </form>

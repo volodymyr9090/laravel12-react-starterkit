@@ -14,37 +14,38 @@ class RolePermissionSeeder extends Seeder
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $user = Role::firstOrCreate(['name' => 'user']);
 
-        // Daftar permission terstruktur berdasarkan group
+        // Daftar permission berdasarkan menu structure
         $permissions = [
-            'User' => [
-                'create user',
-                'edit user',
-                'delete user',
-                'manage users',
-            ],
-            'Role' => [
-                'create role',
-                'edit role',
-                'delete role',
-                'manage roles',
-            ],
-            'Setting' => [
-                'edit setting',
-                'view setting',
-            ],
             'Dashboard' => [
-                'view dashboard',
+                'dashboard-view',
+            ],
+            'Access' => [
+                'access-view',
+                'permission-view',
+                'users-view',
+                'roles-view',
+            ],
+            'Settings' => [
+                'settings-view',
+                'menu-view',
+                'app-settings-view',
+                'backup-view',
+            ],
+            'Utilities' => [
+                'utilities-view',
+                'log-view',
+                'filemanager-view',
             ],
         ];
 
-        foreach ($permissions as $group => $items) {
-            foreach ($items as $permName) {
+        foreach ($permissions as $group => $perms) {
+            foreach ($perms as $name) {
                 $permission = Permission::firstOrCreate([
-                    'name' => $permName,
+                    'name' => $name,
                     'group' => $group,
                 ]);
 
-                // Assign semua permission ke admin
+                // Assign ke admin
                 if (!$admin->hasPermissionTo($permission)) {
                     $admin->givePermissionTo($permission);
                 }

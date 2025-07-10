@@ -44,21 +44,21 @@ export default function UserForm({ user, roles, currentRole }: Props) {
   };
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Manajemen Pengguna', href: '/users' },
-    { title: isEdit ? 'Edit Pengguna' : 'Tambah Pengguna', href: '#' },
+    { title: 'User Management', href: '/users' },
+    { title: isEdit ? 'Edit User' : 'Create User', href: '#' },
   ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={isEdit ? 'Edit Pengguna' : 'Tambah Pengguna'} />
+      <Head title={isEdit ? 'Edit User' : 'Create User'} />
       <div className="flex-1 p-4 md:p-6">
         <Card className="max-w-3xl mx-auto">
           <CardHeader className="pb-3">
             <CardTitle className="text-2xl font-bold tracking-tight">
-              {isEdit ? 'Edit Pengguna' : 'Tambah Pengguna Baru'}
+              {isEdit ? 'Edit User' : 'Create New User'}
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              {isEdit ? 'Perbarui data pengguna dan peran' : 'Masukkan data pengguna dan atur peran'}
+              {isEdit ? 'Update user data and role' : 'Enter user data and set role'}
             </p>
           </CardHeader>
 
@@ -69,10 +69,10 @@ export default function UserForm({ user, roles, currentRole }: Props) {
               <div className="space-y-4">
                 {/* Name */}
                 <div>
-                  <Label htmlFor="name" className="mb-2 block">Nama</Label>
+                  <Label htmlFor="name" className="mb-2 block">Name</Label>
                   <Input
                     id="name"
-                    placeholder="Nama lengkap"
+                    placeholder="Full name"
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
                     className={errors.name ? 'border-red-500' : ''}
@@ -85,7 +85,7 @@ export default function UserForm({ user, roles, currentRole }: Props) {
                   <Label htmlFor="email" className="mb-2 block">Email</Label>
                   <Input
                     id="email"
-                    placeholder="Alamat email"
+                    placeholder="Email address"
                     value={data.email}
                     onChange={(e) => setData('email', e.target.value)}
                     className={errors.email ? 'border-red-500' : ''}
@@ -95,7 +95,7 @@ export default function UserForm({ user, roles, currentRole }: Props) {
 
                 {/* Password */}
                 <div>
-                  <Label htmlFor="password" className="mb-2 block">Password {isEdit ? '(Opsional)' : ''}</Label>
+                  <Label htmlFor="password" className="mb-2 block">Password {isEdit ? '(Optional)' : ''}</Label>
                   <Input
                     id="password"
                     type="password"
@@ -109,13 +109,13 @@ export default function UserForm({ user, roles, currentRole }: Props) {
 
                 {/* Role */}
                 <div>
-                  <Label htmlFor="role" className="mb-2 block">Peran</Label>
+                  <Label htmlFor="role" className="mb-2 block">Role</Label>
                   <Select
                     value={data.role}
                     onValueChange={(value) => setData('role', value)}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Pilih role" />
+                      <SelectValue placeholder="Select role" />
                     </SelectTrigger>
                     <SelectContent>
                       {roles.map((role) => (
@@ -134,15 +134,15 @@ export default function UserForm({ user, roles, currentRole }: Props) {
               <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
                 <Link href="/users" className="w-full sm:w-auto">
                   <Button type="button" variant="secondary" className="w-full">
-                    Kembali
+                    Back
                   </Button>
                 </Link>
                 <Button type="submit" disabled={processing} className="w-full sm:w-auto">
                   {processing
-                    ? <span className="animate-pulse">Menyimpan...</span>
+                    ? <span className="animate-pulse">Saving...</span>
                     : isEdit
-                      ? 'Simpan Perubahan'
-                      : 'Buat Pengguna'
+                      ? 'Save Changes'
+                      : 'Create User'
                   }
                 </Button>
               </div>

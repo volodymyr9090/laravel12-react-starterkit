@@ -48,7 +48,7 @@ interface Props {
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Manajemen Menu',
+    title: 'Menu Management',
     href: '/menus',
   },
 ];
@@ -109,8 +109,8 @@ export default function MenuIndex({ menuItems }: Props) {
     };
 
     router.post('/menus/reorder', { menus: buildOrderPayload(menus) }, {
-      onSuccess: () => toast.success('Urutan menu berhasil disimpan'),
-      onError: () => toast.error('Gagal menyimpan urutan menu'),
+      onSuccess: () => toast.success('Menu order saved successfully'),
+      onError: () => toast.error('Failed to save menu order'),
       onFinish: () => setIsSaving(false),
     });
   };
@@ -126,9 +126,9 @@ export default function MenuIndex({ menuItems }: Props) {
             }))
             .filter((m) => m.id !== id)
         );
-        toast.success('Menu berhasil dihapus.');
+        toast.success('Menu deleted successfully.');
       },
-      onError: () => toast.error('Gagal menghapus menu.'),
+      onError: () => toast.error('Failed to delete menu.'),
     });
   };
 
@@ -178,18 +178,18 @@ export default function MenuIndex({ menuItems }: Props) {
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Hapus menu ini?</AlertDialogTitle>
+                    <AlertDialogTitle>Delete this menu?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Menu "{menu.title}" akan dihapus secara permanen.
+                      This will permanently delete the menu "{menu.title}".
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => handleDelete(menu.id)}
                       className="bg-destructive hover:bg-destructive/90"
                     >
-                      Hapus
+                      Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -220,7 +220,7 @@ export default function MenuIndex({ menuItems }: Props) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Manajemen Menu" />
+      <Head title="Menu Management" />
 
       <div className="flex-1 p-4 md:p-6">
         <Card className="w-full">
@@ -228,21 +228,21 @@ export default function MenuIndex({ menuItems }: Props) {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <CardTitle className="text-2xl font-bold tracking-tight">
-                  Manajemen Menu
+                  Menu Management
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  Atur urutan menu utama dan submenu dengan drag & drop
+                  Drag & drop to reorder main menus and submenus
                 </p>
               </div>
               <div className="flex items-center gap-3">
                 <Button onClick={handleSave} disabled={isSaving}>
                   <Save className="mr-2 h-4 w-4" />
-                  {isSaving ? 'Menyimpan...' : 'Simpan Urutan'}
+                  {isSaving ? 'Saving...' : 'Save Order'}
                 </Button>
                 <Link href="/menus/create">
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
-                    Tambah Menu
+                    Add Menu
                   </Button>
                 </Link>
               </div>
@@ -255,12 +255,12 @@ export default function MenuIndex({ menuItems }: Props) {
             {menus.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <p className="text-muted-foreground mb-4">
-                  Belum ada menu yang tersedia
+                  No menus available
                 </p>
                 <Link href="/menus/create">
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
-                    Tambah Menu Pertama
+                    Add First Menu
                   </Button>
                 </Link>
               </div>

@@ -24,7 +24,7 @@ dayjs.locale('id');
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Manajemen Pengguna',
+    title: 'User Management',
     href: '/users',
   },
 ];
@@ -70,21 +70,21 @@ export default function UserIndex({ users }: Props) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Manajemen Pengguna" />
+      <Head title="User Management" />
       <div className="p-4 md:p-6 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Manajemen Pengguna</h1>
-            <p className="text-muted-foreground">Kelola data pengguna dan peran mereka dalam sistem.</p>
+            <h1 className="text-2xl font-bold tracking-tight">User Management</h1>
+            <p className="text-muted-foreground">Manage user data and their roles within the system.</p>
           </div>
           <Link href="/users/create">
-            <Button className="w-full md:w-auto" size="sm">+ Tambah Pengguna</Button>
+            <Button className="w-full md:w-auto" size="sm">+ Add User</Button>
           </Link>
         </div>
 
         <div className="space-y-2 divide-y rounded-md border bg-background">
           {users.data.length === 0 ? (
-            <div className="py-8 text-center text-muted-foreground">Belum ada data pengguna.</div>
+            <div className="py-8 text-center text-muted-foreground">No user data available.</div>
           ) : (
             users.data.map((user) => (
               <div
@@ -100,7 +100,7 @@ export default function UserIndex({ users }: Props) {
                     <div className="text-base font-medium">{user.name}</div>
                     <div className="text-sm text-muted-foreground">{user.email}</div>
                     <div className="text-xs text-muted-foreground italic">
-                      Terdaftar {dayjs(user.created_at).fromNow()}
+                      Registered {dayjs(user.created_at).fromNow()}
                     </div>
                     {user.roles.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1">
@@ -128,18 +128,18 @@ export default function UserIndex({ users }: Props) {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Reset Password?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Password untuk <strong>{user.name}</strong> akan direset menjadi:
+                          Password for <strong>{user.name}</strong> will be reset to:
                           <br />
                           <code className="bg-muted rounded px-2 py-1 text-sm">ResetPasswordNya</code>
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleResetPassword(user.id)}
                           disabled={processing}
                         >
-                          Ya, Reset
+                          Yes, Reset
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -147,22 +147,22 @@ export default function UserIndex({ users }: Props) {
 
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button size="sm" variant="destructive">Hapus</Button>
+                      <Button size="sm" variant="destructive">Delete</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Hapus Pengguna?</AlertDialogTitle>
+                        <AlertDialogTitle>Delete User?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Pengguna <strong>{user.name}</strong> akan dihapus permanen.
+                          User <strong>{user.name}</strong> will be permanently deleted.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDelete(user.id)}
                           disabled={processing}
                         >
-                          Ya, Hapus
+                          Yes, Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

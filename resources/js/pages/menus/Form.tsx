@@ -40,21 +40,21 @@ export default function MenuForm({ menu, parentMenus, permissions }: MenuFormPro
   };
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Manajemen Menu', href: '/menus' },
-    { title: isEdit ? 'Edit Menu' : 'Tambah Menu', href: '#' },
+    { title: 'Menu Management', href: '/menus' },
+    { title: isEdit ? 'Edit Menu' : 'Add Menu', href: '#' },
   ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={isEdit ? 'Edit Menu' : 'Tambah Menu'} />
+      <Head title={isEdit ? 'Edit Menu' : 'Add Menu'} />
       <div className="flex-1 p-4 md:p-6">
         <Card className="max-w-2xl mx-auto">
           <CardHeader className="pb-3">
             <CardTitle className="text-2xl font-bold tracking-tight">
-              {isEdit ? 'Edit Menu' : 'Tambah Menu Baru'}
+              {isEdit ? 'Edit Menu' : 'Add New Menu'}
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              {isEdit ? 'Perbarui detail menu' : 'Buat menu baru untuk sistem'}
+              {isEdit ? 'Update menu details' : 'Create a new menu for the system'}
             </p>
           </CardHeader>
 
@@ -64,12 +64,12 @@ export default function MenuForm({ menu, parentMenus, permissions }: MenuFormPro
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Judul Menu *</Label>
+                  <Label htmlFor="title">Menu Title *</Label>
                   <Input
                     id="title"
                     value={data.title}
                     onChange={(e) => setData('title', e.target.value)}
-                    placeholder="Contoh: Dashboard"
+                    placeholder="Example: Dashboard"
                     className={errors.title ? 'border-red-500' : ''}
                   />
                   {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
@@ -81,7 +81,7 @@ export default function MenuForm({ menu, parentMenus, permissions }: MenuFormPro
                     id="route"
                     value={data.route}
                     onChange={(e) => setData('route', e.target.value)}
-                    placeholder="Contoh: dashboard.index"
+                    placeholder="Example: /dashboard"
                     className={errors.route ? 'border-red-500' : ''}
                   />
                   {errors.route && <p className="text-sm text-red-500">{errors.route}</p>}
@@ -103,7 +103,7 @@ export default function MenuForm({ menu, parentMenus, permissions }: MenuFormPro
                     }
                     className="w-full rounded border px-3 py-2"
                   >
-                    <option value="">— Tidak ada —</option>
+                    <option value="">— None —</option>
                     {parentMenus.map((m) => (
                       <option key={m.id} value={m.id}>
                         {m.title}
@@ -130,19 +130,19 @@ export default function MenuForm({ menu, parentMenus, permissions }: MenuFormPro
               <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
                 <Link href="/menus" className="w-full sm:w-auto">
                   <Button type="button" variant="secondary" className="w-full">
-                    Batal
+                    Cancel
                   </Button>
                 </Link>
                 <Button type="submit" disabled={processing} className="w-full sm:w-auto">
                   {processing ? (
                     <span className="flex items-center gap-2">
                       <span className="animate-spin">↻</span>
-                      {isEdit ? 'Menyimpan...' : 'Membuat...'}
+                      {isEdit ? 'Saving...' : 'Creating...'}
                     </span>
                   ) : isEdit ? (
-                    'Simpan Perubahan'
+                    'Save Changes'
                   ) : (
-                    'Buat Menu'
+                    'Create Menu'
                   )}
                 </Button>
               </div>

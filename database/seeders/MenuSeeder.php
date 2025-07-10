@@ -2,58 +2,119 @@
 
 namespace Database\Seeders;
 
-use App\Models\Menu;
 use Illuminate\Database\Seeder;
+use App\Models\Menu;
 
 class MenuSeeder extends Seeder
 {
     public function run(): void
     {
-        // Menu Dashboard
+        // MENU: Dashboard
         Menu::create([
             'title' => 'Dashboard',
-            'icon' => 'LayoutGrid',
+            'icon' => 'Home',
             'route' => '/dashboard',
             'order' => 1,
-            'roles' => ['admin', 'user'],
+            'permission_name' => 'dashboard-view',
         ]);
 
-        // Menu Roles
+        // GROUP: Access
+        $access = Menu::create([
+            'title' => 'Access',
+            'icon' => 'Contact',
+            'route' => '#',
+            'order' => 2,
+            'permission_name' => 'access-view',
+        ]);
+
+        Menu::create([
+            'title' => 'Permissions',
+            'icon' => 'AlertOctagon',
+            'route' => '/permissions',
+            'order' => 2,
+            'permission_name' => 'permission-view',
+            'parent_id' => $access->id,
+        ]);
+
+        Menu::create([
+            'title' => 'Users',
+            'icon' => 'Users',
+            'route' => '/users',
+            'order' => 3,
+            'permission_name' => 'users-view',
+            'parent_id' => $access->id,
+        ]);
+
         Menu::create([
             'title' => 'Roles',
-            'icon' => 'Users',
+            'icon' => 'AlertTriangle',
             'route' => '/roles',
-            'order' => 2,
-            'roles' => ['admin'],
+            'order' => 4,
+            'permission_name' => 'roles-view',
+            'parent_id' => $access->id,
         ]);
 
-        // Menu Settings (parent)
+        // GROUP: Settings
         $settings = Menu::create([
-            'title' => 'Pengaturan',
+            'title' => 'Settings',
             'icon' => 'Settings',
-            'route' => null,
+            'route' => '#',
             'order' => 3,
-            'roles' => ['admin'],
+            'permission_name' => 'settings-view',
         ]);
 
-        // Submenu: Menu
         Menu::create([
-            'title' => 'Menu',
-            'icon' => 'List',
+            'title' => 'Menu Manager',
+            'icon' => 'Menu',
             'route' => '/menus',
-            'parent_id' => $settings->id,
             'order' => 1,
-            'roles' => ['admin'],
+            'permission_name' => 'menu-view',
+            'parent_id' => $settings->id,
         ]);
 
-        // Submenu: Aplikasi
         Menu::create([
-            'title' => 'Aplikasi',
-            'icon' => 'Settings2',
-            'route' => '/settings',
-            'parent_id' => $settings->id,
+            'title' => 'App Settings',
+            'icon' => 'AtSign',
+            'route' => '/settingsapp',
             'order' => 2,
-            'roles' => ['admin'],
+            'permission_name' => 'app-settings-view',
+            'parent_id' => $settings->id,
+        ]);
+
+        Menu::create([
+            'title' => 'Backup',
+            'icon' => 'Inbox',
+            'route' => '/backup',
+            'order' => 3,
+            'permission_name' => 'backup-view',
+            'parent_id' => $settings->id,
+        ]);
+
+        // GROUP: Utilities
+        $utilities = Menu::create([
+            'title' => 'Utilities',
+            'icon' => 'CreditCard',
+            'route' => '#',
+            'order' => 4,
+            'permission_name' => 'utilities-view',
+        ]);
+
+        Menu::create([
+            'title' => 'Audit Logs',
+            'icon' => 'Activity',
+            'route' => '/audit-logs',
+            'order' => 2,
+            'permission_name' => 'log-view',
+            'parent_id' => $utilities->id,
+        ]);
+
+        Menu::create([
+            'title' => 'File Manager',
+            'icon' => 'Folder',
+            'route' => '/files',
+            'order' => 3,
+            'permission_name' => 'filemanager-view',
+            'parent_id' => $utilities->id,
         ]);
     }
 }

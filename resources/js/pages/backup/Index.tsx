@@ -35,16 +35,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function BackupIndex({ backups }: Props) {
   const handleBackup = () => {
     router.post('/backup/run', {}, {
-      onSuccess: () => toast.success('Backup berhasil dibuat'),
-      onError: () => toast.error('Backup gagal'),
+      onSuccess: () => toast.success('Backup created successfully'),
+      onError: () => toast.error('Failed to create backup'),
       preserveScroll: true,
     });
   };
 
   const handleDelete = (filename: string) => {
     router.delete(`/backup/delete/${filename}`, {
-      onSuccess: () => toast.success('Backup berhasil dihapus'),
-      onError: () => toast.error('Gagal menghapus backup'),
+      onSuccess: () => toast.success('Backup deleted successfully'),
+      onError: () => toast.error('Failed to delete backup'),
       preserveScroll: true,
     });
   };
@@ -57,17 +57,17 @@ export default function BackupIndex({ backups }: Props) {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle className="text-2xl font-bold">Backup Database</CardTitle>
-              <p className="text-muted-foreground text-sm">Kelola file backup sistem</p>
+              <CardTitle className="text-2xl font-bold">Database Backups</CardTitle>
+              <p className="text-muted-foreground text-sm">Manage system backup files</p>
             </div>
-            <Button onClick={handleBackup}>Buat Backup</Button>
+            <Button onClick={handleBackup}>Create Backup</Button>
           </CardHeader>
 
           <Separator />
 
           <CardContent className="pt-4 space-y-4">
             {backups.length === 0 ? (
-              <p className="text-muted-foreground text-center">Belum ada backup.</p>
+              <p className="text-muted-foreground text-center">No backups available.</p>
             ) : (
               <ul className="space-y-2">
                 {backups.map((backup, index) => (
@@ -93,19 +93,19 @@ export default function BackupIndex({ backups }: Props) {
 
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button variant="destructive" size="sm">Hapus</Button>
+                          <Button variant="destructive" size="sm">Delete</Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Hapus backup ini?</AlertDialogTitle>
+                            <AlertDialogTitle>Delete this backup?</AlertDialogTitle>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
                               className="bg-destructive hover:bg-destructive/90"
                               onClick={() => handleDelete(backup.name)}
                             >
-                              Hapus
+                              Delete
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
