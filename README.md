@@ -1,4 +1,4 @@
-![Landing Page](./screenshots/landing.png)
+![Landing Page](./screenshots/landing-welcome.png)
 
 # 🚀 Laravel 12 + React Starter Kit
 
