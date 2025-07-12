@@ -21,12 +21,24 @@ export interface NavItem {
     isActive?: boolean;
 }
 
-export interface SharedData {
-    name: string;
-    quote: { message: string; author: string };
-    auth: Auth;
-    [key: string]: unknown;
-}
+export interface Setting {
+    nama_app: string;
+    logo?: string;
+    warna?: string;
+    seo?: {
+      title?: string;
+      description?: string;
+      keywords?: string;
+    };
+  }
+  
+  export interface SharedData {
+      name: string;
+      quote: { message: string; author: string };
+      auth: Auth;
+      setting?: Setting;
+      [key: string]: unknown;
+  }
 
 export interface User {
     id: number;

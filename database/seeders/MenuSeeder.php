@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Menu;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class MenuSeeder extends Seeder
 {
@@ -116,5 +118,14 @@ class MenuSeeder extends Seeder
             'permission_name' => 'filemanager-view',
             'parent_id' => $utilities->id,
         ]);
+
+        $permissions = Menu::pluck('permission_name')->unique()->filter();
+
+        foreach ($permissions as $permName) {
+            Permission::firstOrCreate(['name' => $permName]);
+        }
+
+        $role = Role::firstOrCreate(['name' => 'user']);
+        $role->givePermissionTo('dashboard-view');
     }
 }
