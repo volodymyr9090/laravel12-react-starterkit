@@ -14,8 +14,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const summaryData = [
-  { label: 'Users', value: 420, color: '#4ade80' },
-  { label: 'Backups', value: 80, color: '#f472b6' },
+  { label: 'Users', value: 20, color: '#4ade80' },
+  { label: 'Backups', value: 830, color: '#f472b6' },
   { label: 'Activity Logs', value: 1570, color: '#38bdf8' },
 ];
 
