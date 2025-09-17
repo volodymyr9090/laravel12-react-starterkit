@@ -30,17 +30,29 @@ return [
         'database_dump_compressor' => null,
 
         'mysql' => [
-            'dump_command_path' => 'C:\\xampp\\mysql\\bin',
+            'driver' => 'mysql',
+            'url' => env('DB_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([]) : [],
+
+            // ✅ THIS is the correct place for mysqldump path
             'dump' => [
+                'dump_binary_path' => 'C:/xampp/mysql/bin',  // use forward slashes
                 'use_single_transaction' => true,
                 'timeout' => 60,
-                'extra_options' => [
-                    '--host=127.0.0.1',
-                    '--port=3306',
-                    '--user=' . env('DB_USERNAME', 'root'),
-                    '--password=' . env('DB_PASSWORD', ''),
-                    '--result-file=C:\\work\\Laravel\\laravel12-react-starterkit\\storage\\app\\backup-temp\\db.sql',
-                ],
+                'exclude_tables' => [],
+                'extra_options' => [],
             ],
         ],
 
@@ -55,7 +67,7 @@ return [
             'disks' => ['local'],
         ],
 
-        'temporary_directory' => 'C:\\work\\Laravel\\laravel12-react-starterkit\\storage\\app\\backup-temp',
+        'temporary_directory' => storage_path('app/backup-temp'),
 
         'password' => env('BACKUP_ARCHIVE_PASSWORD'),
         'encryption' => 'default',
