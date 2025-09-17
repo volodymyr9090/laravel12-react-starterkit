@@ -34,7 +34,8 @@ class BackupController extends Controller
 
     public function run()
     {
-        Artisan::call('backup:run --only-db');
+        Artisan::call('backup:run', ['--only-db' => true,]);
+        dd(Artisan::output());
         return redirect()->back()->with('success', 'Backup berhasil dibuat.');
     }
 

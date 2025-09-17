@@ -62,11 +62,16 @@ return [
             ]) : [],
 
             'dump' => [
-                'dump_binary_path' => '/Applications/XAMPP/xamppfiles/bin',
+                // ✅ Full path to mysqldump.exe (required in Windows/XAMPP)
+                'dump_binary_path' => 'C:\\xampp\\mysql\\bin\\mysqldump.exe',
+
+                // ✅ Ensure TCP protocol is used
                 'use_single_transaction' => true,
                 'timeout' => 60,
                 'extra_options' => [
-                    '--socket=/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock',
+                    '--host=127.0.0.1',
+                    '--port=3306',
+                    '--protocol=TCP',
                 ],
             ],
         ],
