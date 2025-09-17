@@ -1,5 +1,5 @@
 import React from 'react';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,11 +13,15 @@ const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Dashboard', href: '/dashboard' },
 ];
 
-const summaryData = [
-  { label: 'Users', value: 20, color: '#4ade80' },
-  { label: 'Backups', value: 830, color: '#f472b6' },
-  { label: 'Activity Logs', value: 1570, color: '#38bdf8' },
-];
+interface DashboardProps {
+  summaryData: { label: string; value: number; color: string }[];
+}
+
+// const summaryData = [
+//   { label: 'Users', value: 20, color: '#4ade80' },
+//   { label: 'Backups', value: 830, color: '#f472b6' },
+//   { label: 'Activity Logs', value: 1570, color: '#38bdf8' },
+// ];
 
 const monthlyData = [
   { name: 'Jan', Users: 50, Backups: 10 },
@@ -49,6 +53,9 @@ const radialData = [
 const COLORS = ['#0ea5e9', '#14b8a6', '#f97316', '#9333ea'];
 
 export default function Dashboard() {
+  const { props } = usePage<{ summaryData: DashboardProps['summaryData'] }>();
+  const { summaryData } = props;
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Dashboard" />

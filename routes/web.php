@@ -11,15 +11,18 @@ use App\Http\Controllers\UserFileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SettingAppController;
 use App\Http\Controllers\MediaFolderController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
 Route::middleware(['auth', 'menu.permission'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('mypage');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')
+    ->middleware('checkage');
+
+    Route::get('mypage', [DashboardController::class, 'mypage'])->name('mypage')
+    ->middleware('checkage');
 
     Route::resource('roles', RoleController::class);
     Route::resource('menus', MenuController::class);

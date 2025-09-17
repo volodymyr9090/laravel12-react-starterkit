@@ -3,6 +3,7 @@
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\ShareMenus;
 use App\Http\Middleware\CheckMenuPermission;
+use App\Http\Middleware\CheckAge;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -23,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'menu.permission' => CheckMenuPermission::class,
+            'checkage' => CheckAge::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

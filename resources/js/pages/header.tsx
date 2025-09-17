@@ -1,4 +1,7 @@
+import React, { useState } from 'react';
+
 const Header = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
     return (
         <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
             <div className="container mx-auto px-4">
@@ -23,7 +26,7 @@ const Header = () => {
                                 {/* Solutions Dropdown */}
                                 <li className="relative group">
                                     <button
-                                        className="flex items-center text-gray-700 hover:text-blue-600 font-medium py-2"
+                                        className="flex items-center text-gray-700 hover:text-blue-600 font-medium pt-2 pb-0"
                                     >
                                         Solutions
                                         <svg className="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +93,7 @@ const Header = () => {
                                 {/* Resources Dropdown */}
                                 <li className="relative group">
                                     <button
-                                        className="flex items-center text-gray-700 hover:text-blue-600 font-medium py-2"
+                                        className="flex items-center text-gray-700 hover:text-blue-600 font-medium pt-2 pb-0"
                                     >
                                         Resources
                                         <svg className="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -183,7 +186,7 @@ const Header = () => {
                                 {/* Company Dropdown */}
                                 <li className="relative group">
                                     <button
-                                        className="flex items-center text-gray-700 hover:text-blue-600 font-medium py-2"
+                                        className="flex items-center text-gray-700 hover:text-blue-600 font-medium pt-2 pb-0"
                                     >
                                         Company
                                         <svg className="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -255,7 +258,7 @@ const Header = () => {
                         <a
                             href="https://app.growrk.com/sso/login/"
                             target="_blank"
-                            className="text-blue-600 hover:text-blue-800 font-medium hidden lg:block"
+                            className="text-yellow-400 hover:text-yellow-500 font-medium hidden lg:block"
                         >
                             Login
                         </a>
@@ -265,16 +268,51 @@ const Header = () => {
                     <div className="w-2/12 flex justify-center">
                         <a
                             href="#"
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition-colors hidden lg:block"
+                            className="bg-yellow-400 hover:bg-yellow-500 text-white font-medium py-1 px-6 rounded-4xl transition-colors hidden lg:block"
                         >
-                            Get Started
+                            Request a demo
                         </a>
                     </div>
-                    <div className="lg:hidden">
-                        <img src="menu.png" className='w-8 h-8'></img>
+                    <div className="block lg:hidden md:block">
+                        <button onClick={() => setMenuOpen(!menuOpen)}>
+                            <img src="menu.png" className='w-8 h-8'></img>
+                        </button>
                     </div>
                 </div>
             </div>
+            {/* Mobile Menu Drawer */}
+            {menuOpen && (
+                <div className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex transition-opacity duration-300 ease-in-out opacity-100">
+                    <div className="bg-white w-64 h-full shadow-lg p-6 relative transform transition-transform duration-300 ease-in-out translate-x-0">
+                        <button
+                            className="absolute top-4 right-4 text-gray-700 text-2xl"
+                            onClick={() => setMenuOpen(false)}
+                            aria-label="Close menu"
+                        >
+                            ×
+                        </button>
+                        <nav>
+                            <ul className="space-y-4 mt-10">
+                                <li><a href="https://growrk.com/product?hsLang=en">Solutions</a></li>
+                                <li><a href="https://growrk.com/blog?hsLang=en">Resources</a></li>
+                                <li><a href="https://growrk.com/pricing?hsLang=en">Pricing</a></li>
+                                <li><a href="https://growrk.com/why-growrk?hsLang=en">Why GroWrk</a></li>
+                                <li><a href="https://growrk.com/about-us?hsLang=en">Company</a></li>
+                                <li><a href="https://growrk.com/faqs?hsLang=en">FAQ</a></li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="bg-yellow-400 hover:bg-yellow-500 text-white font-medium py-2 px-4 rounded-4xl transition-colors block text-center"
+                                    >
+                                        Login
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div className="flex-1" onClick={() => setMenuOpen(false)} />
+                </div>
+            )}
         </header >
     );
 };

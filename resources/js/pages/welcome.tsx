@@ -1,9 +1,18 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { type SharedData } from '@/types';
 import { useEffect } from 'react';
+import toastr from 'toastr';
+import { Inertia } from '@inertiajs/inertia';
 
 export default function Welcome() {
   const { auth, setting } = usePage<SharedData>().props;
+  const { flash } = usePage().props;
+
+  useEffect(() => {
+    if (flash.error) {
+      toastr.error(flash.error);
+    }
+  }, [flash.error]);
 
   const primaryColor = setting?.warna || '#0ea5e9';
   const primaryForeground = '#ffffff';
@@ -14,6 +23,11 @@ export default function Welcome() {
     document.documentElement.style.setProperty('--primary-foreground', primaryForeground);
     document.documentElement.style.setProperty('--color-primary-foreground', primaryForeground);
   }, [primaryColor, primaryForeground]);
+
+  // Inside your component
+  const handleLogout = () => {
+    Inertia.post('/logout'); // Sends a POST request to the logout route
+  };
 
   return (
     <>
@@ -38,7 +52,7 @@ export default function Welcome() {
 
           {/* CTA section */}
           {auth.user ? (
-            <div className="space-y-4">
+            <div className="space-y-4 space-x-4">
               <Link
                 href="/dashboard"
                 className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-[var(--primary)] text-white font-medium hover:bg-[var(--primary)]/90 transition-all transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
@@ -47,6 +61,13 @@ export default function Welcome() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
+              </Link>
+              <Link
+                href="#"
+                onClick={handleLogout}
+                className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-[var(--primary)] text-white font-medium hover:bg-[var(--primary)]/90 transition-all transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
+              >
+                Log out
               </Link>
             </div>
           ) : (
