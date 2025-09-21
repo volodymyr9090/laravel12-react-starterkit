@@ -63,7 +63,7 @@ return [
 
             'dump' => [
                 // ✅ Full path to mysqldump.exe (required in Windows/XAMPP)
-                'dump_binary_path' => 'C:\\xampp\\mysql\\bin\\mysqldump.exe',
+                'dump_binary_path' => 'C:/xampp/mysql/bin/',
 
                 // ✅ Ensure TCP protocol is used
                 'use_single_transaction' => true,

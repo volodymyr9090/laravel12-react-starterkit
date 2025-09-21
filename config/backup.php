@@ -48,7 +48,7 @@ return [
 
             // ✅ THIS is the correct place for mysqldump path
             'dump' => [
-                'dump_binary_path' => 'C:/xampp/mysql/bin',  // use forward slashes
+                'dump_binary_path' => env('DB_DUMP_BINARY_PATH', ''),
                 'use_single_transaction' => true,
                 'timeout' => 60,
                 'exclude_tables' => [],

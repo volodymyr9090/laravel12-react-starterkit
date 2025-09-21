@@ -14,11 +14,11 @@ class UserFileController extends Controller
 
         $folders = $user->mediaFolders()->orderBy('name')->get();
 
-        // ✅ Cek folder aktif
+        // ✅ Check active folder
         $currentFolder = $folderId ? $user->mediaFolders()->find($folderId) : null;
 
         if ($folderId && !$currentFolder) {
-            // 🛑 Jika folder tidak ada, redirect ke root
+            // 🛑 If the folder does not exist, redirect to the root.
             return redirect('/files');
         }
 
@@ -34,7 +34,7 @@ class UserFileController extends Controller
                 });
             })
             ->get();
-
+        
         return Inertia::render('files/Index', [
             'folders' => $folders,
             'currentFolderId' => $folderId,
@@ -58,12 +58,14 @@ class UserFileController extends Controller
         ]);
 
         foreach ($request->file('files') as $file) {
-            $request->user()
+            $media = $request->user()
                 ->addMedia($file)
                 ->withCustomProperties([
                     'folder_id' => $request->input('folder_id'),
                 ])
                 ->toMediaCollection('files');
+
+            dd($media->getPath());
         }
 
         return back()->with('success', 'Files uploaded successfully');

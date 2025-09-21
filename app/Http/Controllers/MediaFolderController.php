@@ -62,13 +62,13 @@ class MediaFolderController extends Controller
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:media_folders,id',
         ]);
-
+        
         $request->user()->mediaFolders()->create([
             'name' => $request->name,
             'parent_id' => $request->parent_id,
         ]);
 
-        return back()->with('success', 'Folder berhasil dibuat.');
+        return back()->with('success', 'The folder was created successfully.');
     }
 
     public function destroy(MediaFolder $medium)

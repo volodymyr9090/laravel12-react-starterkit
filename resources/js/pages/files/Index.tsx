@@ -96,24 +96,24 @@ function getFileIcon(mime: string) {
   if (mime.startsWith('image/')) return <FileImage className="w-5 h-5 text-blue-500" />;
   if (mime.startsWith('video/')) return <FileVideo className="w-5 h-5 text-purple-500" />;
   if (mime.startsWith('audio/')) return <FileAudio className="w-5 h-5 text-pink-500" />;
-  if (mime.includes('zip') || mime.includes('rar') || mime.includes('tar') || mime.includes('7z')) 
+  if (mime.includes('zip') || mime.includes('rar') || mime.includes('tar') || mime.includes('7z'))
     return <FileArchive className="w-5 h-5 text-yellow-500" />;
   if (mime.includes('pdf')) return <FileText className="w-5 h-5 text-red-500" />;
-  if (mime.includes('text') || mime.includes('csv') || mime.includes('json')) 
+  if (mime.includes('text') || mime.includes('csv') || mime.includes('json'))
     return <FileText className="w-5 h-5 text-green-500" />;
   if (mime.includes('word')) return <FileText className="w-5 h-5 text-blue-600" />;
-  if (mime.includes('excel') || mime.includes('sheet')) 
+  if (mime.includes('excel') || mime.includes('sheet'))
     return <FileText className="w-5 h-5 text-green-600" />;
-  if (mime.includes('powerpoint') || mime.includes('presentation')) 
+  if (mime.includes('powerpoint') || mime.includes('presentation'))
     return <FileText className="w-5 h-5 text-orange-500" />;
   return <File className="w-5 h-5 text-gray-500" />;
 }
 
 function isPreviewable(mime: string) {
   return (
-    mime.startsWith('image/') || 
-    mime.startsWith('text/') || 
-    mime.includes('pdf') || 
+    mime.startsWith('image/') ||
+    mime.startsWith('text/') ||
+    mime.includes('pdf') ||
     mime.includes('document')
   );
 }
@@ -128,15 +128,15 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
 
   const confirmDeleteFolder = () => {
     if (!deleteFolderId) return;
-  
+
     const deletingCurrent = deleteFolderId === currentFolderId;
-  
+
     router.delete(`/media/${deleteFolderId}`, {
       preserveScroll: true,
       onSuccess: () => {
         toast.success('Folder deleted successfully');
         setDeleteFolderId(null);
-  
+
         if (deletingCurrent) {
           router.visit('/files', { replace: true });
         } else {
@@ -193,7 +193,7 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
         toast.error('Failed to create folder');
         setIsCreatingFolder(false);
       },
-    });      
+    });
   };
 
   const renderFolderTree = (nodes: (FolderNode & { children: FolderNode[] })[], level = 0) => {
@@ -209,7 +209,7 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
           {folder.children.length === 0 && (
             <span className="w-4 h-4"></span>
           )}
-          
+
           <Folder className="w-4 h-4 text-yellow-500" />
           <span className="text-sm truncate flex-1">{folder.name}</span>
 
@@ -263,9 +263,9 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
         <div className="md:col-span-1 border rounded-lg p-4 bg-white">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-semibold">Folder Structure</h2>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setIsCreatingFolder(true)}
               className="gap-1"
             >
@@ -273,7 +273,7 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
               <span>New Folder</span>
             </Button>
           </div>
-          
+
           <div className="overflow-y-auto max-h-[calc(100vh-250px)]">
             <div
               className={`flex items-center gap-2 cursor-pointer hover:bg-gray-100 p-2 rounded mb-2 ${!currentFolderId ? 'bg-gray-100' : ''}`}
@@ -308,8 +308,8 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
                 className="hidden"
                 multiple
               />
-              <Button 
-                onClick={() => fileInputRef.current?.click()} 
+              <Button
+                onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
                 className="gap-2"
               >
@@ -325,9 +325,9 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
             <div className="flex flex-col items-center justify-center h-64 text-gray-500">
               <Folder className="w-12 h-12 mb-2" />
               <p>No files in this folder</p>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="mt-2"
                 onClick={() => fileInputRef.current?.click()}
               >
@@ -337,8 +337,8 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {files.map((file) => (
-                <div 
-                  key={file.id} 
+                <div
+                  key={file.id}
                   className="border rounded-lg p-4 hover:border-blue-500 transition-colors group cursor-pointer"
                   onClick={() => isPreviewable(file.mime_type) ? setPreviewFile(file) : null}
                 >
@@ -352,8 +352,8 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
                       </div>
                     </div>
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <a 
-                        href={file.url} 
+                      <a
+                        href={file.url}
                         download={file.name}
                         onClick={(e) => e.stopPropagation()}
                         className="p-1 text-gray-500 hover:text-blue-500"
@@ -362,7 +362,7 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
                       </a>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <button 
+                          <button
                             className="p-1 text-gray-500 hover:text-red-500"
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -437,14 +437,14 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
               </DialogHeader>
               <div className="flex-1 overflow-auto p-4">
                 {previewFile.mime_type.startsWith('image/') ? (
-                  <img 
-                    src={previewFile.url} 
-                    alt={previewFile.name} 
+                  <img
+                    src={previewFile.url}
+                    alt={previewFile.name}
                     className="max-w-full max-h-[70vh] mx-auto object-contain"
                   />
                 ) : previewFile.mime_type.includes('pdf') ? (
-                  <iframe 
-                    src={previewFile.url} 
+                  <iframe
+                    src={previewFile.url}
                     className="w-full h-[70vh] border rounded"
                     title={previewFile.name}
                   />
@@ -456,8 +456,8 @@ export default function FileManager({ folders, currentFolderId, currentFolder, f
                   <div className="flex flex-col items-center justify-center h-64 text-gray-500">
                     <File className="w-12 h-12 mb-2" />
                     <p>Preview not available</p>
-                    <a 
-                      href={previewFile.url} 
+                    <a
+                      href={previewFile.url}
                       download={previewFile.name}
                       className="mt-2 text-blue-500 hover:underline"
                     >
