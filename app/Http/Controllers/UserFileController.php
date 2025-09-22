@@ -64,8 +64,6 @@ class UserFileController extends Controller
                     'folder_id' => $request->input('folder_id'),
                 ])
                 ->toMediaCollection('files');
-
-            dd($media->getPath());
         }
 
         return back()->with('success', 'Files uploaded successfully');

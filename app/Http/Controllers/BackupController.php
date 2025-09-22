@@ -35,8 +35,7 @@ class BackupController extends Controller
     public function run()
     {
         Artisan::call('backup:run', ['--only-db' => true,]);
-        dd(Artisan::output());
-        return redirect()->back()->with('success', 'Backup berhasil dibuat.');
+        return redirect()->back()->with('success', 'Backup created successfully.');
     }
 
     public function download($file)
@@ -44,7 +43,7 @@ class BackupController extends Controller
         $path = storage_path('app/' . $this->backupPath . '/' . $file);
 
         if (!file_exists($path)) {
-            abort(404, 'File tidak ditemukan.');
+            abort(404, 'File not found.');
         }
 
         return response()->download($path);
@@ -55,11 +54,11 @@ class BackupController extends Controller
         $path = storage_path('app/' . $this->backupPath . '/' . $file);
 
         if (!file_exists($path)) {
-            return redirect()->back()->with('error', 'File tidak ditemukan.');
+            return redirect()->back()->with('error', 'File not found.');
         }
 
         unlink($path);
 
-        return redirect()->back()->with('success', 'Backup berhasil dihapus.');
+        return redirect()->back()->with('success', 'Backup deleted successfully.');
     }
 }

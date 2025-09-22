@@ -15,27 +15,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface DashboardProps {
   summaryData: { label: string; value: number; color: string }[];
+  monthlyData: { name: string; Users: number; Backups: number }[];
+  pieData: { name: string; value: number; color: string }[];
+  areaData: { month: string; users: number; backups: number }[];
+  radialData: { name: string; value: number; fill: string }[];
 }
 
-// const summaryData = [
-//   { label: 'Users', value: 20, color: '#4ade80' },
-//   { label: 'Backups', value: 830, color: '#f472b6' },
-//   { label: 'Activity Logs', value: 1570, color: '#38bdf8' },
+// const pieData = [
+//   { name: 'Admin', value: 20, color: '#fbbf24' },
+//   { name: 'User', value: 80, color: '#a78bfa' },
 // ];
-
-const monthlyData = [
-  { name: 'Jan', Users: 50, Backups: 10 },
-  { name: 'Feb', Users: 120, Backups: 25 },
-  { name: 'Mar', Users: 80, Backups: 15 },
-  { name: 'Apr', Users: 150, Backups: 30 },
-  { name: 'May', Users: 90, Backups: 20 },
-  { name: 'Jun', Users: 170, Backups: 35 },
-];
-
-const pieData = [
-  { name: 'Admin', value: 20, color: '#fbbf24' },
-  { name: 'User', value: 80, color: '#a78bfa' },
-];
 
 const areaData = [
   { month: 'Jan', users: 400, backups: 100 },
@@ -53,8 +42,16 @@ const radialData = [
 const COLORS = ['#0ea5e9', '#14b8a6', '#f97316', '#9333ea'];
 
 export default function Dashboard() {
-  const { props } = usePage<{ summaryData: DashboardProps['summaryData'] }>();
-  const { summaryData } = props;
+  const { props } = usePage<DashboardProps>();
+  const { summaryData, monthlyData, rolePercentData } = props;
+
+  const pieData = Object.entries(rolePercentData.percentages).map(
+    ([role, percentage], index) => ({
+      name: role,
+      value: percentage,
+      color: COLORS[index % COLORS.length],
+    })
+  );
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
